@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="de" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Advanced UniByte GmbH | SASE Visualisierung</title>
+
+  <!-- Bootstrap + Icons via CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Eigene Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="noise"></div>
+  <div class="aurora aurora-1"></div>
+  <div class="aurora aurora-2"></div>
+
+  <nav class="navbar navbar-expand-lg fixed-top nav-blur">
+    <div class="container">
+      <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html" aria-label="Advanced UniByte GmbH SASE Lab">
+        <img src="logo.png" alt="Advanced UniByte GmbH Logo" class="brand-logo" onerror="this.style.display='none'">
+        <span class="brand-mark"><i class="bi bi-shield-lock"></i></span>
+        <span class="brand-wording">
+          <span>Advanced UniByte GmbH</span>
+          <small>SASE Command Center</small>
+        </span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="topNav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="#topology">Topologie</a></li>
+          <li class="nav-item"><a class="nav-link" href="#capabilities">Capabilities</a></li>
+          <li class="nav-item"><a class="nav-link" href="#telemetry">Telemetry</a></li>
+          <li class="nav-item"><a class="nav-link" href="impressum.html">Impressum</a></li>
+          <li class="nav-item"><a class="nav-link" href="datenschutz.html">Datenschutz</a></li>
+          <li class="nav-item">
+            <button id="simulateThreat" class="btn btn-sm btn-glow ms-lg-3">
+              <i class="bi bi-lightning-charge-fill me-1"></i> Threat simulieren
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero-section">
+      <div class="container">
+        <div class="row align-items-center g-5 min-vh-100 py-5">
+          <div class="col-lg-6">
+            <span class="eyebrow mb-3"><i class="bi bi-stars"></i> Advanced UniByte GmbH • SASE Lab • Übungsprojekt</span>
+            <h1 class="display-3 fw-black hero-title">
+              Secure Access
+              <span class="gradient-text">Service Edge</span>
+            </h1>
+            <p class="lead text-secondary-emphasis mt-4">
+              Eine interaktive Darkmode-Visualisierung im Advanced-UniByte-Look, wie Nutzer, Geräte,
+              Standorte und Cloud-Apps über einen globalen SASE-Edge sicher verbunden, geprüft und geschützt werden.
+            </p>
+            <div class="brand-note mt-4">
+              <i class="bi bi-info-circle"></i>
+              <span>Testwebsite für Übungszwecke – keine offizielle Produktivseite und kein reales Security-Monitoring.</span>
+            </div>
+
+            <div class="d-flex flex-wrap gap-3 mt-4">
+              <button class="btn btn-primary btn-lg rounded-pill px-4" data-jump="#topology">
+                <i class="bi bi-diagram-3 me-2"></i> Architektur ansehen
+              </button>
+              <button class="btn btn-outline-light btn-lg rounded-pill px-4" data-jump="#telemetry">
+                <i class="bi bi-activity me-2"></i> Live-Status
+              </button>
+            </div>
+
+            <div class="hero-stats mt-5">
+              <div class="stat-tile">
+                <span class="stat-value" data-counter="latency">18</span><span class="stat-unit">ms</span>
+                <small>Edge Latenz</small>
+              </div>
+              <div class="stat-tile">
+                <span class="stat-value" data-counter="risk">07</span><span class="stat-unit">%</span>
+                <small>Risiko</small>
+              </div>
+              <div class="stat-tile">
+                <span class="stat-value" data-counter="sessions">4.8</span><span class="stat-unit">k</span>
+                <small>Sessions</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="hero-orb-card">
+              <div class="orb-wrap" aria-label="Animierte SASE Security Cloud">
+                <div class="orbit orbit-a"><span>SWG</span></div>
+                <div class="orbit orbit-b"><span>ZTNA</span></div>
+                <div class="orbit orbit-c"><span>CASB</span></div>
+                <div class="core-orb">
+                  <i class="bi bi-shield-check"></i>
+                  <strong>AUB SASE Edge</strong>
+                  <small>Policy • Identity • Context</small>
+                </div>
+              </div>
+              <div class="glass-caption">
+                <div>
+                  <strong>Policy Decision Point</strong>
+                  <span>Jede Anfrage wird kontextbasiert bewertet.</span>
+                </div>
+                <i class="bi bi-fingerprint"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="topology" class="section-pad">
+      <div class="container">
+        <div class="section-heading text-center mx-auto">
+          <span class="eyebrow"><i class="bi bi-node-plus"></i> Interaktive Architektur</span>
+          <h2 class="fw-black mt-3">Vom User bis zur Cloud – alles über den Security Edge</h2>
+          <p class="text-secondary-emphasis">
+            Klicke auf Nodes oder Services, um Details zu sehen. Starte die Simulation, um zu sehen,
+            wie ein Threat erkannt und isoliert wird.
+          </p>
+        </div>
+
+        <div class="row g-4 align-items-stretch">
+          <div class="col-xl-8">
+            <div class="topology-card glass-card" id="topologyCard">
+              <div class="topology-header">
+                <div>
+                  <h3 class="h5 mb-1">Advanced UniByte SASE Traffic Fabric</h3>
+                  <span class="text-secondary">Identity-aware, least privilege, encrypted by default</span>
+                </div>
+                <div class="status-pill">
+                  <span class="live-dot"></span> Live
+                </div>
+              </div>
+
+              <div class="svg-shell">
+                <svg id="saseSvg" viewBox="0 0 960 560" role="img" aria-label="SASE Netzwerkdiagramm">
+                  <defs>
+                    <linearGradient id="edgeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#0099B5"/>
+                      <stop offset="45%" stop-color="#ffffff"/>
+                      <stop offset="100%" stop-color="#0099B5"/>
+                    </linearGradient>
+
+                    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="7" result="blur"/>
+                      <feMerge>
+                        <feMergeNode in="blur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
+
+                    <path id="pathUserEdge" d="M130 155 C285 115 345 235 470 260" />
+                    <path id="pathBranchEdge" d="M125 410 C300 395 310 305 470 280" />
+                    <path id="pathDeviceEdge" d="M165 285 C270 255 350 255 470 270" />
+                    <path id="pathEdgeCloud" d="M520 260 C640 190 720 140 840 145" />
+                    <path id="pathEdgeApp" d="M525 300 C655 345 720 405 842 410" />
+                  </defs>
+
+                  <g class="paths">
+                    <use href="#pathUserEdge" class="flow-line"></use>
+                    <use href="#pathBranchEdge" class="flow-line"></use>
+                    <use href="#pathDeviceEdge" class="flow-line"></use>
+                    <use href="#pathEdgeCloud" class="flow-line"></use>
+                    <use href="#pathEdgeApp" class="flow-line"></use>
+                  </g>
+
+                  <g class="packets">
+                    <circle r="5" class="packet packet-a">
+                      <animateMotion dur="4.8s" repeatCount="indefinite">
+                        <mpath href="#pathUserEdge"/>
+                      </animateMotion>
+                    </circle>
+                    <circle r="5" class="packet packet-b">
+                      <animateMotion dur="5.6s" repeatCount="indefinite">
+                        <mpath href="#pathBranchEdge"/>
+                      </animateMotion>
+                    </circle>
+                    <circle r="5" class="packet packet-c">
+                      <animateMotion dur="4.2s" repeatCount="indefinite">
+                        <mpath href="#pathEdgeCloud"/>
+                      </animateMotion>
+                    </circle>
+                  </g>
+
+                  <g id="threatParticle" class="threat-particle">
+                    <circle r="8"></circle>
+                    <circle r="16" class="threat-pulse"></circle>
+                    <animateMotion id="threatMotion" dur="3.2s" begin="indefinite" fill="freeze">
+                      <mpath href="#pathUserEdge"/>
+                    </animateMotion>
+                  </g>
+
+                  <g class="node external-node" data-service="user" transform="translate(130 155)" tabindex="0">
+                    <circle r="52"></circle>
+                    <foreignObject x="-45" y="-38" width="90" height="76">
+                      <div class="node-html">
+                        <i class="bi bi-person-workspace"></i>
+                        <span>User</span>
+                      </div>
+                    </foreignObject>
+                  </g>
+
+                  <g class="node external-node" data-service="device" transform="translate(165 285)" tabindex="0">
+                    <circle r="48"></circle>
+                    <foreignObject x="-45" y="-38" width="90" height="76">
+                      <div class="node-html">
+                        <i class="bi bi-phone"></i>
+                        <span>Device</span>
+                      </div>
+                    </foreignObject>
+                  </g>
+
+                  <g class="node external-node" data-service="branch" transform="translate(125 410)" tabindex="0">
+                    <circle r="52"></circle>
+                    <foreignObject x="-48" y="-38" width="96" height="76">
+                      <div class="node-html">
+                        <i class="bi bi-building-lock"></i>
+                        <span>Branch</span>
+                      </div>
+                    </foreignObject>
+                  </g>
+
+                  <g class="node edge-node active" data-service="sase" transform="translate(495 278)" tabindex="0">
+                    <circle r="86" class="edge-ring"></circle>
+                    <circle r="62" class="edge-core"></circle>
+                    <foreignObject x="-66" y="-54" width="132" height="108">
+                      <div class="node-html edge-html">
+                        <i class="bi bi-shield-check"></i>
+                        <span>AUB SASE Edge</span>
+                        <small>Policy Brain</small>
+                      </div>
+                    </foreignObject>
+                  </g>
+
+                  <g class="node external-node" data-service="cloud" transform="translate(842 145)" tabindex="0">
+                    <circle r="55"></circle>
+                    <foreignObject x="-52" y="-40" width="104" height="80">
+                      <div class="node-html">
+                        <i class="bi bi-cloud-check"></i>
+                        <span>Cloud Apps</span>
+                      </div>
+                    </foreignObject>
+                  </g>
+
+                  <g class="node external-node" data-service="internet" transform="translate(842 410)" tabindex="0">
+                    <circle r="55"></circle>
+                    <foreignObject x="-52" y="-40" width="104" height="80">
+                      <div class="node-html">
+                        <i class="bi bi-globe2"></i>
+                        <span>Internet</span>
+                      </div>
+                    </foreignObject>
+                  </g>
+
+                  <g class="service-ring" transform="translate(495 278)">
+                    <g class="service-node" data-service="swg" transform="translate(-40 -150)" tabindex="0">
+                      <circle r="34"></circle>
+                      <text y="6">SWG</text>
+                    </g>
+                    <g class="service-node" data-service="ztna" transform="translate(115 -96)" tabindex="0">
+                      <circle r="34"></circle>
+                      <text y="6">ZTNA</text>
+                    </g>
+                    <g class="service-node" data-service="casb" transform="translate(142 68)" tabindex="0">
+                      <circle r="34"></circle>
+                      <text y="6">CASB</text>
+                    </g>
+                    <g class="service-node" data-service="fwaas" transform="translate(0 158)" tabindex="0">
+                      <circle r="34"></circle>
+                      <text y="6">FW</text>
+                    </g>
+                    <g class="service-node" data-service="dlp" transform="translate(-145 70)" tabindex="0">
+                      <circle r="34"></circle>
+                      <text y="6">DLP</text>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+
+              <div class="legend-row">
+                <span><i class="legend-dot normal"></i> Erlaubter Traffic</span>
+                <span><i class="legend-dot inspect"></i> Inspection</span>
+                <span><i class="legend-dot threat"></i> Blockierter Threat</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-4">
+            <aside class="glass-card detail-card h-100">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <span class="eyebrow"><i class="bi bi-cpu"></i> Service Detail</span>
+                  <h3 id="detailTitle" class="h4 mt-3 mb-2">SASE Edge</h3>
+                </div>
+                <div id="detailIcon" class="detail-icon"><i class="bi bi-shield-check"></i></div>
+              </div>
+
+              <p id="detailText" class="text-secondary-emphasis">
+                Der zentrale Cloud-native Security-Layer vereint Netzwerkzugriff, Identitätsprüfung,
+                Policy Enforcement und Threat Protection nah am Nutzer.
+              </p>
+
+              <div id="detailTags" class="tag-cloud"></div>
+
+              <div class="trust-panel mt-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <strong>Adaptive Trust Score</strong>
+                  <span id="trustLabel" class="badge text-bg-success">Niedriges Risiko</span>
+                </div>
+                <input id="trustRange" type="range" class="form-range" min="0" max="100" value="22">
+                <div class="trust-meter" aria-hidden="true">
+                  <span id="trustMeterFill"></span>
+                </div>
+                <small class="text-secondary">Passe den Kontext an: Gerät, Standort, Verhalten und App-Sensibilität.</small>
+              </div>
+
+              <div class="timeline mt-4">
+                <div class="timeline-title">
+                  <i class="bi bi-broadcast-pin"></i> Security Events
+                </div>
+                <div id="eventLog" class="event-log"></div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="capabilities" class="section-pad">
+      <div class="container">
+        <div class="section-heading mx-auto text-center">
+          <span class="eyebrow"><i class="bi bi-grid-1x2"></i> SASE Bausteine</span>
+          <h2 class="fw-black mt-3">Capabilities als Security-Control-Plane</h2>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-6 col-xl-4">
+            <article class="cap-card glass-card" data-service="ztna">
+              <i class="bi bi-door-closed"></i>
+              <h3>ZTNA</h3>
+              <p>App-Zugriff ohne implizites Vertrauen, segmentiert nach Identität und Kontext.</p>
+              <button class="btn btn-sm btn-outline-info">Fokus setzen</button>
+            </article>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <article class="cap-card glass-card" data-service="swg">
+              <i class="bi bi-browser-edge"></i>
+              <h3>SWG</h3>
+              <p>Web-Traffic prüfen, Malware blockieren und unsichere Kategorien kontrollieren.</p>
+              <button class="btn btn-sm btn-outline-info">Fokus setzen</button>
+            </article>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <article class="cap-card glass-card" data-service="casb">
+              <i class="bi bi-cloud-fog2"></i>
+              <h3>CASB</h3>
+              <p>SaaS-Nutzung sichtbar machen, Schatten-IT erkennen und Policies erzwingen.</p>
+              <button class="btn btn-sm btn-outline-info">Fokus setzen</button>
+            </article>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <article class="cap-card glass-card" data-service="fwaas">
+              <i class="bi bi-fire"></i>
+              <h3>FWaaS</h3>
+              <p>Cloud-basierte Firewall-Regeln, IPS und Layer-7-Kontrollen global ausrollen.</p>
+              <button class="btn btn-sm btn-outline-info">Fokus setzen</button>
+            </article>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <article class="cap-card glass-card" data-service="dlp">
+              <i class="bi bi-file-earmark-lock"></i>
+              <h3>DLP</h3>
+              <p>Sensible Daten erkennen, klassifizieren und Abfluss in Echtzeit verhindern.</p>
+              <button class="btn btn-sm btn-outline-info">Fokus setzen</button>
+            </article>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <article class="cap-card glass-card" data-service="sase">
+              <i class="bi bi-diagram-3"></i>
+              <h3>Unified Policy</h3>
+              <p>Eine Policy Engine für User, Apps, Devices, Netzwerk und Risiko.</p>
+              <button class="btn btn-sm btn-outline-info">Fokus setzen</button>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="telemetry" class="section-pad">
+      <div class="container">
+        <div class="row g-4 align-items-stretch">
+          <div class="col-lg-5">
+            <div class="glass-card p-4 h-100">
+              <span class="eyebrow"><i class="bi bi-speedometer2"></i> Live Telemetry</span>
+              <h2 class="fw-black mt-3">Policy Enforcement in Echtzeit</h2>
+              <p class="text-secondary-emphasis">
+                Die Werte werden per JavaScript animiert und zeigen beispielhaft, wie ein SASE-Stack
+                Sessions, Latenz, Risiko und blockierte Events überwacht.
+              </p>
+
+              <div class="control-grid">
+                <button class="control-chip active" data-filter="all">Alle</button>
+                <button class="control-chip" data-filter="allowed">Allowed</button>
+                <button class="control-chip" data-filter="inspected">Inspected</button>
+                <button class="control-chip" data-filter="blocked">Blocked</button>
+              </div>
+
+              <div class="mt-4">
+                <button id="resetBtn" class="btn btn-outline-light rounded-pill">
+                  <i class="bi bi-arrow-clockwise me-2"></i> Dashboard resetten
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-7">
+            <div class="telemetry-grid">
+              <div class="metric-card glass-card" data-status="allowed">
+                <span class="metric-icon success"><i class="bi bi-check2-circle"></i></span>
+                <small>Allowed Sessions</small>
+                <strong data-counter="allowed">12840</strong>
+                <div class="spark spark-a"></div>
+              </div>
+              <div class="metric-card glass-card" data-status="inspected">
+                <span class="metric-icon info"><i class="bi bi-search"></i></span>
+                <small>Inspected Requests</small>
+                <strong data-counter="inspected">42891</strong>
+                <div class="spark spark-b"></div>
+              </div>
+              <div class="metric-card glass-card" data-status="blocked">
+                <span class="metric-icon danger"><i class="bi bi-x-octagon"></i></span>
+                <small>Blocked Threats</small>
+                <strong data-counter="blocked">317</strong>
+                <div class="spark spark-c"></div>
+              </div>
+              <div class="metric-card glass-card" data-status="allowed">
+                <span class="metric-icon warning"><i class="bi bi-router"></i></span>
+                <small>Active Edges</small>
+                <strong data-counter="edges">42</strong>
+                <div class="spark spark-d"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="py-5">
+    <div class="container d-flex flex-column flex-lg-row justify-content-between gap-4 text-secondary">
+      <div class="footer-brand">
+        <strong>Advanced UniByte GmbH • SASE Visualisierung</strong>
+        <span>Testwebsite für Übungszwecke • HTML/CSS/JavaScript + Bootstrap</span>
+      </div>
+      <div class="footer-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <span><i class="bi bi-moon-stars"></i> Darkmode by default</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS + Eigene Logik -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
