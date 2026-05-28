@@ -221,6 +221,28 @@ function resetDashboard() {
   addEvent("Demo zurückgesetzt", "Die Ausgangswerte und die Standardansicht sind wieder aktiv.", "success");
 }
 
+
+function setCompareMode(mode) {
+  document.querySelectorAll(".compare-tab").forEach(button => {
+    button.classList.toggle("active", button.dataset.compare === mode);
+  });
+
+  document.querySelectorAll("[data-compare-panel]").forEach(panel => {
+    const isActive = panel.dataset.comparePanel === mode;
+    panel.classList.toggle("active", isActive);
+    panel.classList.toggle("dimmed", !isActive);
+  });
+
+  const label = mode === "classic" ? "klassischen Remote-Access-Prozess" : "SASE-Zugriffspfad";
+  addEvent("Vergleichsansicht gewechselt", `Fokus auf ${label}.`);
+}
+
+function bindComparison() {
+  document.querySelectorAll(".compare-tab").forEach(button => {
+    button.addEventListener("click", () => setCompareMode(button.dataset.compare));
+  });
+}
+
 function bindInteractions() {
   document.querySelectorAll("[data-service]").forEach(element => {
     element.addEventListener("click", () => setActiveService(element.dataset.service));
@@ -256,6 +278,7 @@ function seedEvents() {
 
 function boot() {
   bindInteractions();
+  bindComparison();
   setActiveService("sase");
   updateTrust(Number(trustRange.value));
   seedEvents();

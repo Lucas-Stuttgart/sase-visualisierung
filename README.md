@@ -13,6 +13,7 @@ Statische Demo-Website für eine SASE-Architektur im AU-Farblook mit getrennten 
 
 - Bootstrap 5 im Darkmode
 - Animierte SASE-Topologie mit SASE PoP / Policy Enforcement Point als SVG
+- Vergleichsabschnitt: klassischer Remote Access ohne SASE vs. kontextbasierter SASE-Zugriff
 - Klickbare SASE-Bausteine: ZTNA, SWG, CASB, FWaaS, DLP
 - Simulierte Security-Events und Demo-Telemetrie
 - Impressum und Datenschutz mit Hinweis auf Testwebsite für Übungszwecke

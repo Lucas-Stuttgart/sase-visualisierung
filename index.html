@@ -38,6 +38,7 @@
       <div id="topNav" class="collapse navbar-collapse">
         <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
           <li class="nav-item"><a class="nav-link" href="#topology">Topologie</a></li>
+          <li class="nav-item"><a class="nav-link" href="#comparison">Vergleich</a></li>
           <li class="nav-item"><a class="nav-link" href="#capabilities">Bausteine</a></li>
           <li class="nav-item"><a class="nav-link" href="#telemetry">Telemetrie</a></li>
           <li class="nav-item"><a class="nav-link" href="impressum.html">Impressum</a></li>
@@ -71,8 +72,8 @@
               <button class="btn btn-primary btn-lg rounded-pill px-4" data-jump="#topology">
                 <i class="bi bi-diagram-3 me-2"></i> Architektur ansehen
               </button>
-              <button class="btn btn-outline-light btn-lg rounded-pill px-4" data-jump="#telemetry">
-                <i class="bi bi-activity me-2"></i> Live-Status
+              <button class="btn btn-outline-light btn-lg rounded-pill px-4" data-jump="#comparison">
+                <i class="bi bi-arrow-left-right me-2"></i> Vergleich ansehen
               </button>
             </div>
 
@@ -331,6 +332,145 @@
                 <div id="eventLog" class="event-log"></div>
               </div>
             </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="comparison" class="section-pad comparison-section">
+      <div class="container">
+        <div class="section-heading text-center mx-auto">
+          <span class="eyebrow"><i class="bi bi-arrow-left-right"></i> Vergleich</span>
+          <h2 class="fw-black mt-3">Klassischer Zugriff ohne SASE im Vergleich</h2>
+          <p class="text-secondary-emphasis">
+            Der Vergleich zeigt vereinfacht, warum moderne Zugriffe anders bewertet werden müssen:
+            Nutzer, Geräte und Anwendungen befinden sich nicht mehr nur im Unternehmensnetz.
+          </p>
+        </div>
+
+        <div class="comparison-toggle glass-card p-2 mx-auto mb-4" role="group" aria-label="Vergleichsansicht auswählen">
+          <button class="compare-tab active" data-compare="classic">
+            <i class="bi bi-hdd-network"></i> Klassisch
+          </button>
+          <button class="compare-tab" data-compare="sase">
+            <i class="bi bi-shield-check"></i> Mit SASE
+          </button>
+        </div>
+
+        <div class="row g-4 align-items-stretch">
+          <div class="col-lg-6">
+            <article class="compare-card glass-card classic-flow active" data-compare-panel="classic">
+              <div class="compare-card-head">
+                <div>
+                  <span class="compare-kicker">Ohne SASE</span>
+                  <h3>Klassischer Remote-Access-Prozess</h3>
+                </div>
+                <span class="compare-badge warning">Netzwerkzentriert</span>
+              </div>
+
+              <div class="flow-lane classic-lane" aria-label="Klassischer Zugriffspfad ohne SASE">
+                <div class="flow-step">
+                  <i class="bi bi-person-laptop"></i>
+                  <strong>Nutzer</strong>
+                  <small>Extern oder mobil</small>
+                </div>
+                <div class="flow-arrow"><span></span></div>
+                <div class="flow-step">
+                  <i class="bi bi-key"></i>
+                  <strong>VPN</strong>
+                  <small>Tunnel ins Netzwerk</small>
+                </div>
+                <div class="flow-arrow"><span></span></div>
+                <div class="flow-step">
+                  <i class="bi bi-building-lock"></i>
+                  <strong>Zentrale Security</strong>
+                  <small>Firewall / Proxy</small>
+                </div>
+                <div class="flow-arrow"><span></span></div>
+                <div class="flow-step muted-step">
+                  <i class="bi bi-cloud"></i>
+                  <strong>Apps</strong>
+                  <small>SaaS / Internet / intern</small>
+                </div>
+              </div>
+
+              <ul class="compare-list">
+                <li><i class="bi bi-arrow-repeat"></i> Traffic wird häufig erst ins zentrale Netzwerk zurückgeführt.</li>
+                <li><i class="bi bi-diagram-2"></i> VPN-Zugriff ist oft näher am Netzwerk als an der einzelnen Anwendung.</li>
+                <li><i class="bi bi-sliders"></i> Richtlinien, Logs und Prüfungen liegen häufig in mehreren Systemen.</li>
+                <li><i class="bi bi-hourglass-split"></i> SaaS- und Cloud-Zugriffe können durch Umwege unnötig langsam wirken.</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="col-lg-6">
+            <article class="compare-card glass-card sase-flow" data-compare-panel="sase">
+              <div class="compare-card-head">
+                <div>
+                  <span class="compare-kicker">Mit SASE</span>
+                  <h3>Kontextbasierter Zugriff über SASE</h3>
+                </div>
+                <span class="compare-badge success">Policybasiert</span>
+              </div>
+
+              <div class="flow-lane sase-lane" aria-label="SASE Zugriffspfad">
+                <div class="flow-step">
+                  <i class="bi bi-person-check"></i>
+                  <strong>Nutzer</strong>
+                  <small>Identität + MFA</small>
+                </div>
+                <div class="flow-arrow"><span></span></div>
+                <div class="flow-step">
+                  <i class="bi bi-phone-check"></i>
+                  <strong>Gerät</strong>
+                  <small>Posture Check</small>
+                </div>
+                <div class="flow-arrow"><span></span></div>
+                <div class="flow-step active-step">
+                  <i class="bi bi-shield-lock"></i>
+                  <strong>SASE PoP</strong>
+                  <small>Policy Enforcement</small>
+                </div>
+                <div class="flow-arrow"><span></span></div>
+                <div class="flow-step">
+                  <i class="bi bi-cloud-check"></i>
+                  <strong>App</strong>
+                  <small>Nur erlaubter Zugriff</small>
+                </div>
+              </div>
+
+              <ul class="compare-list">
+                <li><i class="bi bi-person-badge"></i> Entscheidungen berücksichtigen Identität, Gerät, Ziel, Standort und Risiko.</li>
+                <li><i class="bi bi-door-closed"></i> Zugriff erfolgt anwendungsbezogen statt als pauschale Netzwerkfreigabe.</li>
+                <li><i class="bi bi-funnel"></i> Web-, SaaS- und Datenflüsse können einheitlich geprüft werden.</li>
+                <li><i class="bi bi-lightning-charge"></i> Der nächstgelegene SASE PoP kann Umwege über das zentrale Netz reduzieren.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+
+        <div class="row g-4 mt-2">
+          <div class="col-md-4">
+            <div class="contrast-tile glass-card">
+              <i class="bi bi-signpost-split"></i>
+              <h4>Zugriffsmodell</h4>
+              <p>Klassisch startet häufig mit Netzwerkzugang. SASE bewertet stärker den konkreten Zugriff auf eine Anwendung.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="contrast-tile glass-card">
+              <i class="bi bi-shield-check"></i>
+              <h4>Security-Prüfung</h4>
+              <p>Bei SASE werden Sicherheitsfunktionen näher am Nutzer und konsistenter über verschiedene Ziele hinweg angewendet.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="contrast-tile glass-card">
+              <i class="bi bi-cloud-arrow-up"></i>
+              <h4>Cloud-Nutzung</h4>
+              <p>Für SaaS, Internet und mobile Arbeit ist ein direkter, geprüfter Zugriff oft passender als zentraler Backhaul.</p>
+            </div>
           </div>
         </div>
       </div>
