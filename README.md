@@ -1,28 +1,32 @@
-# Advanced UniByte GmbH – SASE Visualisierung
+# AU SASE Lab
 
-Interaktive Darkmode-Webvisualisierung für **SASE (Secure Access Service Edge)** im Look der Advanced UniByte GmbH.
+Statische Demo-Website für eine SASE-Architektur im AU-Farblook mit getrennten Dateien:
 
-## Dateien
+- `index.html`
+- `styles.css`
+- `script.js`
+- `impressum.html`
+- `datenschutz.html`
+- optional: `logo.png`
 
-- `index.html` – Hauptseite mit interaktiver SASE-Visualisierung
-- `styles.css` – Darkmode, Advanced-UniByte-Farben und Animationen
-- `script.js` – Interaktionen, Threat-Simulation und Live-Metriken
-- `impressum.html` – Impressum mit Testwebsite-Hinweis
-- `datenschutz.html` – Datenschutzhinweis mit Testwebsite-Hinweis
-- `logo.png` – bitte dein echtes Advanced-UniByte-Logo neben `index.html` ablegen
+## Inhalt
 
-## Unternehmensfarben
-
-- Hellblau: `#0099B5`
-- Nachtblau: `#003244`
-- Weiß: `#ffffff`
+- Bootstrap 5 im Darkmode
+- Animierte SASE-Topologie als SVG
+- Klickbare SASE-Bausteine: ZTNA, SWG, CASB, FWaaS, DLP
+- Simulierte Security-Events und Demo-Telemetrie
+- Impressum und Datenschutz mit Hinweis auf Testwebsite für Übungszwecke
 
 ## Start
 
-Öffne `index.html` direkt im Browser.
+Lege dein `logo.png` in denselben Ordner wie `index.html` und öffne `index.html` im Browser.
 
-Für Bootstrap und Bootstrap Icons werden CDN-Links genutzt. Für eine produktive Website sollten externe Ressourcen und Rechtstexte final geprüft werden.
+Für Bootstrap und Icons wird ein CDN genutzt. Eine Internetverbindung ist daher sinnvoll.
 
 ## GitHub Pages
 
-Lege alle Dateien im Repository-Root ab und aktiviere unter **Settings → Pages** den Branch-Deploy aus `main` und `/root`.
+Die Dateien können direkt im Root eines GitHub-Pages-Repositories liegen. Für die Domain `dhbw-lucas.de` kann zusätzlich eine `CNAME`-Datei mit genau diesem Inhalt verwendet werden:
+
+```text
+dhbw-lucas.de
+```

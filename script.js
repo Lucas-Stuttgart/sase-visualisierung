@@ -1,68 +1,68 @@
 const services = {
   sase: {
-    title: "Advanced UniByte SASE Edge",
+    title: "SASE Edge",
     icon: "bi-shield-check",
-    text: "Der Advanced-UniByte-Demo-Edge bündelt Netzwerkzugriff, Identitätsprüfung, Policy Enforcement und Threat Protection nah am Nutzer.",
+    text: "SASE bündelt Netzwerk- und Sicherheitsfunktionen als cloudnahes Service-Modell. Entscheidungen werden anhand von Identität, Gerätezustand, Zielanwendung und Risiko getroffen.",
     tags: ["Unified Policy", "Edge PoP", "TLS Inspection", "Context Engine", "Zero Trust"]
   },
   ztna: {
     title: "Zero Trust Network Access",
     icon: "bi-door-closed",
-    text: "ZTNA ersetzt klassische VPN-Modelle: User erhalten nur Zugriff auf exakt freigegebene Apps, nicht auf das gesamte Netzwerk.",
+    text: "ZTNA stellt den Zugriff auf einzelne Anwendungen bereit. Es wird nicht pauschal ein gesamtes Netzwerk freigegeben.",
     tags: ["Least Privilege", "Identity-first", "App Segmentation", "Continuous Auth"]
   },
   swg: {
     title: "Secure Web Gateway",
     icon: "bi-browser-edge",
-    text: "SWG kontrolliert Web-Zugriffe, stoppt Malware, prüft URLs und erzwingt Richtlinien für riskante Internet-Nutzung.",
+    text: "SWG bewertet Webzugriffe anhand von Kategorien, Bedrohungsinformationen und Sicherheitsrichtlinien.",
     tags: ["URL Filtering", "Malware Defense", "Browser Control", "SSL Inspection"]
   },
   casb: {
     title: "Cloud Access Security Broker",
     icon: "bi-cloud-fog2",
-    text: "CASB schafft Transparenz über SaaS-Nutzung, erkennt Schatten-IT und schützt Daten in Cloud-Anwendungen.",
+    text: "CASB unterstützt Transparenz und Richtlinienkontrolle für SaaS- und Cloud-Anwendungen.",
     tags: ["SaaS Visibility", "Shadow IT", "API Control", "Tenant Restriction"]
   },
   fwaas: {
     title: "Firewall as a Service",
     icon: "bi-fire",
-    text: "FWaaS bringt Firewall-, IPS- und Layer-7-Kontrollen in die Cloud und verteilt sie global über Edge-Standorte.",
+    text: "FWaaS stellt Firewall- und Layer-7-Kontrollen als cloudnahen Dienst bereit.",
     tags: ["L7 Firewall", "IPS", "Egress Control", "Global Rules"]
   },
   dlp: {
     title: "Data Loss Prevention",
     icon: "bi-file-earmark-lock",
-    text: "DLP erkennt sensible Daten wie personenbezogene Informationen, Quellcode oder Finanzdaten und verhindert Abfluss.",
+    text: "DLP erkennt sensible Datenmuster und kann Richtlinien anwenden, um unerwünschten Datenabfluss zu reduzieren.",
     tags: ["Data Discovery", "Classification", "Exfiltration Stop", "Compliance"]
   },
   user: {
     title: "User Identity",
     icon: "bi-person-workspace",
-    text: "Identität, Rolle, MFA-Status und Verhalten bilden den Startpunkt jeder Policy-Entscheidung.",
+    text: "Identität, Rolle, MFA-Status und Verhalten liefern wichtige Signale für die Zugriffsbewertung.",
     tags: ["MFA", "Role Context", "Behavior", "Risk Signal"]
   },
   device: {
     title: "Device Posture",
     icon: "bi-phone",
-    text: "Gerätezustand, Patch-Level, EDR-Status und Standort fließen in die adaptive Zugriffsbewertung ein.",
+    text: "Gerätezustand, Patch-Level, Sicherheitsstatus und Standort können in die Zugriffsbewertung einfließen.",
     tags: ["Posture Check", "EDR", "Patch Level", "Geo Signal"]
   },
   branch: {
     title: "Branch / SD-WAN",
     icon: "bi-building-lock",
-    text: "Standorte verbinden sich direkt und sicher zum nächsten Edge, ohne Backhauling durch zentrale Rechenzentren.",
+    text: "Standorte können über SD-WAN- oder Edge-Anbindungen mit Sicherheitsdiensten und Anwendungen verbunden werden.",
     tags: ["SD-WAN", "Local Breakout", "QoS", "Encrypted Tunnel"]
   },
   cloud: {
     title: "Cloud Apps",
     icon: "bi-cloud-check",
-    text: "SaaS-, IaaS- und private Anwendungen werden nur nach erfolgreicher Policy-Prüfung erreichbar.",
+    text: "SaaS-, IaaS- und private Anwendungen werden in diesem Modell erst nach Policy-Prüfung erreichbar.",
     tags: ["SaaS", "IaaS", "Private Apps", "API Security"]
   },
   internet: {
     title: "Internet Egress",
     icon: "bi-globe2",
-    text: "Internet-Traffic wird kategorisiert, inspiziert und nach Bedrohungen oder Datenverlustmustern gefiltert.",
+    text: "Internet-Traffic kann kategorisiert, geprüft und anhand von Bedrohungs- oder Datenmustern bewertet werden.",
     tags: ["DNS Control", "Threat Intel", "Content Filter", "Sandboxing"]
   }
 };
@@ -96,7 +96,7 @@ function setActiveService(key) {
     item.classList.toggle("active", item.dataset.service === key);
   });
 
-  addEvent("Policy context aktualisiert", `${service.title} wurde fokussiert.`, "success");
+  addEvent("Demo-Kontext aktualisiert", `${service.title} wurde ausgewählt.`, "success");
 }
 
 function addEvent(title, message, variant = "") {
@@ -121,7 +121,7 @@ function updateTrust(value) {
     trustLabel.textContent = "Adaptive Prüfung";
     trustLabel.className = "badge text-bg-warning";
   } else {
-    trustLabel.textContent = "High Risk";
+    trustLabel.textContent = "Hohes Risiko";
     trustLabel.className = "badge text-bg-danger";
   }
 
@@ -173,7 +173,7 @@ function simulateThreat() {
   topologyCard.classList.add("threat-mode");
   threatParticle.classList.add("active");
 
-  addEvent("Anomalie erkannt", "Ungewöhnlicher Login-Kontext von User → Edge.", "danger");
+  addEvent("Demo-Anomalie erkannt", "Beispielhafter Login-Kontext mit erhöhtem Risiko.", "danger");
   setActiveService("swg");
 
   try {
@@ -184,19 +184,19 @@ function simulateThreat() {
 
   setTimeout(() => {
     setActiveService("ztna");
-    addEvent("ZTNA Challenge", "Session erhält Step-up MFA und App-Zugriff wird begrenzt.", "danger");
+    addEvent("ZTNA-Prüfung", "Die Demo-Session erhält eine zusätzliche Prüfung und eingeschränkten App-Zugriff.", "danger");
     trustRange.value = 78;
     updateTrust(78);
   }, 950);
 
   setTimeout(() => {
     setActiveService("dlp");
-    addEvent("DLP Match", "Verdächtige Datei mit sensitiven Mustern wurde erkannt.", "danger");
+    addEvent("DLP Match", "Eine Beispieldatei mit sensiblen Mustern wurde erkannt.", "danger");
   }, 1850);
 
   setTimeout(() => {
     setActiveService("sase");
-    addEvent("Threat isoliert", "Policy Engine blockiert Exfiltration und hält legitime Sessions aktiv.", "success");
+    addEvent("Anfrage blockiert", "Die Demo-Policy blockiert den riskanten Vorgang und lässt unauffällige Sessions weiterlaufen.", "success");
     topologyCard.classList.remove("threat-mode");
     threatParticle.classList.remove("active");
   }, 3300);
@@ -218,7 +218,7 @@ function resetDashboard() {
   updateTrust(22);
   setActiveService("sase");
   filterTelemetry("all");
-  addEvent("Dashboard zurückgesetzt", "Baseline-Policy und Standardansicht sind wieder aktiv.", "success");
+  addEvent("Demo zurückgesetzt", "Die Ausgangswerte und die Standardansicht sind wieder aktiv.", "success");
 }
 
 function bindInteractions() {
@@ -249,9 +249,9 @@ function bindInteractions() {
 }
 
 function seedEvents() {
-  addEvent("Advanced UniByte SASE Edge online", "Nächster Demo-PoP mit 18 ms Latenz ausgewählt.", "success");
-  addEvent("CASB Policy aktiv", "SaaS-App Zugriff nach Sensitivität bewertet.");
-  addEvent("SWG Inspection", "Web Request wurde kategorisiert und freigegeben.");
+  addEvent("SASE Demo aktiv", "Beispielhafter Edge-Knoten mit 18 ms Latenz ausgewählt.", "success");
+  addEvent("CASB-Regel aktiv", "SaaS-Zugriff anhand einer Beispielrichtlinie bewertet.");
+  addEvent("SWG Inspection", "Web-Request wurde in der Demo kategorisiert und freigegeben.");
 }
 
 function boot() {
