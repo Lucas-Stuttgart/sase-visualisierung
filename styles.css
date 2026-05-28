@@ -103,12 +103,14 @@ body::before {
 }
 
 .brand-logo {
-  max-width: 8.5rem;
-  max-height: 2.4rem;
+  width: 2.55rem;
+  height: 2.55rem;
   object-fit: contain;
-  padding: 0.15rem 0.35rem;
-  border-radius: 0.65rem;
-  background: rgba(255, 255, 255, 0.92);
+  padding: 0.22rem;
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 28px rgba(0, 153, 181, 0.22);
 }
 
 .brand-wording {
@@ -275,8 +277,11 @@ body::before {
   z-index: 3;
   width: 13rem;
   height: 13rem;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
   text-align: center;
   padding: 1.4rem;
   border: 1px solid rgba(103, 232, 249, 0.40);
@@ -287,11 +292,6 @@ body::before {
   box-shadow:
     inset 0 0 40px rgba(255, 255, 255, 0.12),
     0 0 80px rgba(103, 232, 249, 0.28);
-}
-
-.core-orb i {
-  font-size: 2.5rem;
-  color: var(--cyan);
 }
 
 .core-orb strong {
@@ -340,6 +340,42 @@ body::before {
   to {
     transform: rotate(360deg);
   }
+}
+
+.core-icon {
+  width: 3.6rem;
+  height: 3.6rem;
+  object-fit: contain;
+  padding: 0.35rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 34px rgba(0, 153, 181, 0.32);
+}
+
+.legal-icon-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.legal-icon {
+  width: 4.5rem;
+  height: 4.5rem;
+  object-fit: contain;
+  padding: 0.5rem;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 36px rgba(0, 153, 181, 0.28);
+}
+
+.footer-icon {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  padding: 0.18rem;
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.92);
+  margin-right: 0.55rem;
 }
 
 .glass-caption {
@@ -941,6 +977,12 @@ footer {
 
 .footer-brand {
   display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.footer-brand div {
+  display: flex;
   flex-direction: column;
   gap: 0.2rem;
 }
@@ -1026,3 +1068,5 @@ footer {
     height: 10rem;
   }
 }
+
+.footer-brand .footer-icon { flex: 0 0 auto; }

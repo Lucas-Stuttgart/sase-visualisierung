@@ -4,6 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AU SASE Lab | Secure Access Service Edge</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="shortcut icon" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#003244">
 
   <!-- Bootstrap + Icons via CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -21,7 +26,7 @@
   <nav class="navbar navbar-expand-lg fixed-top nav-blur">
     <div class="container">
       <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#" aria-label="AU SASE Lab Startseite">
-        <img src="logo.png" alt="AU Logo" class="brand-logo" onerror="this.style.display='none'">
+        <img src="icon.png" alt="AU Icon" class="brand-logo" onerror="this.style.display='none'">
         <span class="brand-mark">AU</span>
         <span class="brand-wording">
           <span>AU SASE Lab</span>
@@ -56,7 +61,7 @@
             <span class="eyebrow mb-3"><i class="bi bi-diagram-3"></i> AU Übungsprojekt • SASE Architektur</span>
             <h1 class="display-3 fw-black hero-title">
               Secure Access
-              <span class="gradient-text">Service Edge</span>
+              <span class="gradient-text">SASE-Architektur</span>
             </h1>
             <p class="lead text-secondary-emphasis mt-4">
               Diese Übungsseite zeigt exemplarisch eine SASE-Architektur: Identität, Gerätezustand
@@ -75,7 +80,7 @@
             <div class="hero-stats mt-5">
               <div class="stat-tile">
                 <span class="stat-value" data-counter="latency">18</span><span class="stat-unit">ms</span>
-                <small>Edge-Latenz</small>
+                <small>PoP-Latenz</small>
               </div>
               <div class="stat-tile">
                 <span class="stat-value" data-counter="risk">07</span><span class="stat-unit">%</span>
@@ -96,7 +101,8 @@
                 <div class="orbit orbit-c"><span>CASB</span></div>
                 <div class="core-orb">
                   <i class="bi bi-shield-check"></i>
-                  <strong>SASE Edge</strong>
+                  <img src="icon.png" alt="" class="core-icon" onerror="this.style.display='none'">
+                  <strong>Policy Enforcement</strong>
                   <small>Identity • Context • Policy</small>
                 </div>
               </div>
@@ -231,8 +237,8 @@
                     <foreignObject x="-66" y="-54" width="132" height="108">
                       <div class="node-html edge-html">
                         <i class="bi bi-shield-check"></i>
-                        <span>SASE Edge</span>
-                        <small>Policy Brain</small>
+                        <span>SASE PoP</span>
+                        <small>Policy Enforcement</small>
                       </div>
                     </foreignObject>
                   </g>
@@ -295,7 +301,7 @@
               <div class="d-flex justify-content-between align-items-start gap-3">
                 <div>
                   <span class="eyebrow"><i class="bi bi-cpu"></i> Service Detail</span>
-                  <h3 id="detailTitle" class="h4 mt-3 mb-2">SASE Edge</h3>
+                  <h3 id="detailTitle" class="h4 mt-3 mb-2">SASE Policy Enforcement</h3>
                 </div>
                 <div id="detailIcon" class="detail-icon"><i class="bi bi-shield-check"></i></div>
               </div>
@@ -440,7 +446,7 @@
               </div>
               <div class="metric-card glass-card" data-status="allowed">
                 <span class="metric-icon warning"><i class="bi bi-router"></i></span>
-                <small>Aktive Edge-Knoten</small>
+                <small>Aktive SASE PoPs</small>
                 <strong data-counter="edges">42</strong>
                 <div class="spark spark-d"></div>
               </div>
@@ -454,8 +460,11 @@
   <footer class="py-5">
     <div class="container d-flex flex-column flex-lg-row justify-content-between gap-4 text-secondary">
       <div class="footer-brand">
-        <strong>AU SASE Lab</strong>
-        <span>Testwebsite für Übungszwecke • Keine offizielle Produktivseite</span>
+        <img src="icon.png" alt="AU Icon" class="footer-icon" onerror="this.style.display='none'">
+        <div>
+          <strong>AU SASE Lab</strong>
+          <span>Testwebsite für Übungszwecke • Keine offizielle Produktivseite</span>
+        </div>
       </div>
       <div class="footer-links">
         <a href="index.html">Startseite</a>

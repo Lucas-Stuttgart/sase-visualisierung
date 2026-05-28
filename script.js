@@ -1,9 +1,9 @@
 const services = {
   sase: {
-    title: "SASE Edge",
+    title: "SASE Policy Enforcement",
     icon: "bi-shield-check",
     text: "SASE bündelt Netzwerk- und Sicherheitsfunktionen als cloudnahes Service-Modell. Entscheidungen werden anhand von Identität, Gerätezustand, Zielanwendung und Risiko getroffen.",
-    tags: ["Unified Policy", "Edge PoP", "TLS Inspection", "Context Engine", "Zero Trust"]
+    tags: ["Unified Policy", "SASE PoP", "TLS Inspection", "Context Engine", "Zero Trust"]
   },
   ztna: {
     title: "Zero Trust Network Access",
@@ -50,7 +50,7 @@ const services = {
   branch: {
     title: "Branch / SD-WAN",
     icon: "bi-building-lock",
-    text: "Standorte können über SD-WAN- oder Edge-Anbindungen mit Sicherheitsdiensten und Anwendungen verbunden werden.",
+    text: "Standorte können über SD-WAN- oder PoP-Anbindungen mit Sicherheitsdiensten und Anwendungen verbunden werden.",
     tags: ["SD-WAN", "Local Breakout", "QoS", "Encrypted Tunnel"]
   },
   cloud: {
@@ -249,7 +249,7 @@ function bindInteractions() {
 }
 
 function seedEvents() {
-  addEvent("SASE Demo aktiv", "Beispielhafter Edge-Knoten mit 18 ms Latenz ausgewählt.", "success");
+  addEvent("SASE Demo aktiv", "Beispielhafter SASE PoP mit 18 ms Latenz ausgewählt.", "success");
   addEvent("CASB-Regel aktiv", "SaaS-Zugriff anhand einer Beispielrichtlinie bewertet.");
   addEvent("SWG Inspection", "Web-Request wurde in der Demo kategorisiert und freigegeben.");
 }

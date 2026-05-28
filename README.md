@@ -7,19 +7,19 @@ Statische Demo-Website für eine SASE-Architektur im AU-Farblook mit getrennten 
 - `script.js`
 - `impressum.html`
 - `datenschutz.html`
-- optional: `logo.png`
+- `icon.png`
 
 ## Inhalt
 
 - Bootstrap 5 im Darkmode
-- Animierte SASE-Topologie als SVG
+- Animierte SASE-Topologie mit SASE PoP / Policy Enforcement Point als SVG
 - Klickbare SASE-Bausteine: ZTNA, SWG, CASB, FWaaS, DLP
 - Simulierte Security-Events und Demo-Telemetrie
 - Impressum und Datenschutz mit Hinweis auf Testwebsite für Übungszwecke
 
 ## Start
 
-Lege dein `logo.png` in denselben Ordner wie `index.html` und öffne `index.html` im Browser.
+Lege dein eigenes `icon.png` in denselben Ordner wie `index.html`, wenn du das Platzhalter-Icon ersetzen möchtest. Öffne anschließend `index.html` im Browser.
 
 Für Bootstrap und Icons wird ein CDN genutzt. Eine Internetverbindung ist daher sinnvoll.
 

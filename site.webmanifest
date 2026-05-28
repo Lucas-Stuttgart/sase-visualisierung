@@ -1,0 +1,17 @@
+{
+  "name": "AU SASE Lab",
+  "short_name": "AU SASE",
+  "description": "Testwebsite für Übungszwecke zur Visualisierung einer SASE-Architektur.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#003244",
+  "theme_color": "#003244",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
