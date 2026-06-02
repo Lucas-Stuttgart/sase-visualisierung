@@ -528,17 +528,6 @@ svg {
   filter: url(#softGlow);
 }
 
-.external-node:hover {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: nodeBump 650ms ease;
-}
-
-@keyframes nodeBump {
-  45% {
-    scale: 1.06;
-  }
-}
 
 .edge-ring {
   fill: transparent !important;
