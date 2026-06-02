@@ -23,34 +23,7 @@
   <div class="aurora aurora-1"></div>
   <div class="aurora aurora-2"></div>
 
-  <nav class="navbar navbar-expand-lg fixed-top nav-blur">
-    <div class="container">
-      <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#" aria-label="AU SASE Lab Startseite">
-        <img src="icon.png" alt="AU Icon" class="brand-logo" onerror="this.style.display='none'">
-        <span class="brand-wording">
-          <span>AU SASE Lab</span>
-          <small>Secure Access Service Edge</small>
-        </span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div id="topNav" class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-          <li class="nav-item"><a class="nav-link" href="#topology">Topologie</a></li>
-          <li class="nav-item"><a class="nav-link" href="#capabilities">Bausteine</a></li>
-          <li class="nav-item"><a class="nav-link" href="#telemetry">Telemetrie</a></li>
-          <li class="nav-item"><a class="nav-link" href="impressum.html">Impressum</a></li>
-          <li class="nav-item"><a class="nav-link" href="datenschutz.html">Datenschutz</a></li>
-          <li class="nav-item">
-            <button id="simulateThreat" class="btn btn-sm btn-glow ms-lg-3">
-              <i class="bi bi-lightning-charge-fill me-1"></i> Risiko simulieren
-            </button>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <div data-include="header"></div>
 
   <main>
     <section class="hero-section">
@@ -171,6 +144,7 @@
                     <path id="pathDeviceEdge" d="M165 285 C270 255 350 255 470 270" />
                     <path id="pathEdgeCloud" d="M520 260 C640 190 720 140 840 145" />
                     <path id="pathEdgeApp" d="M525 300 C655 345 720 405 842 410" />
+                    <path id="pathRouteSweep" d="M130 155 C285 115 345 235 470 260 C640 190 720 140 840 145" />
                   </defs>
 
                   <g class="paths">
@@ -179,6 +153,18 @@
                     <use href="#pathDeviceEdge" class="flow-line"></use>
                     <use href="#pathEdgeCloud" class="flow-line"></use>
                     <use href="#pathEdgeApp" class="flow-line"></use>
+                  </g>
+
+                  <g class="route-highlight" aria-hidden="true">
+                    <use href="#pathRouteSweep" class="route-highlight-line"></use>
+                  </g>
+
+                  <g id="modeSweep" class="mode-sweep" aria-hidden="true">
+                    <circle r="8"></circle>
+                    <circle r="22" class="mode-sweep-pulse"></circle>
+                    <animateMotion id="modeSweepMotion" dur="1.45s" begin="indefinite" fill="freeze">
+                      <mpath href="#pathRouteSweep"/>
+                    </animateMotion>
                   </g>
 
                   <g class="packets">
@@ -303,14 +289,20 @@
                     </g>
                     <g class="classic-node" data-service="central" transform="translate(124 -92)" tabindex="0">
                       <circle r="38"></circle>
-                      <text y="-2">FW</text>
-                      <text y="13" class="subtext">Proxy</text>
+                      <text y="-2">Proxy</text>
+                      <text y="13" class="subtext">FW</text>
                     </g>
                     <g class="classic-node" data-service="backhaul" transform="translate(0 156)" tabindex="0">
                       <circle r="38"></circle>
-                      <text y="-2">WAN</text>
-                      <text y="13" class="subtext">Backhaul</text>
+                      <text y="-2">DC</text>
+                      <text y="13" class="subtext">Hub</text>
                     </g>
+                  </g>
+
+                  <g class="route-labels" aria-hidden="true">
+                    <text id="routeLabelLeft" x="118" y="72">Nutzer / Gerät / Standort</text>
+                    <text id="routeLabelCore" x="496" y="94">SASE-Policy</text>
+                    <text id="routeLabelRight" x="840" y="72">Cloud / Internet</text>
                   </g>
                 </svg>
               </div>
@@ -319,6 +311,24 @@
                 <span id="legendPrimary"><i class="legend-dot normal"></i> Direkter, geprüfter Zugriff</span>
                 <span id="legendSecondary"><i class="legend-dot inspect"></i> Policy / Inspection</span>
                 <span id="legendThreat"><i class="legend-dot threat"></i> Blockierte Anfrage</span>
+              </div>
+
+              <div class="route-stepper" id="routeStepper" aria-label="Aktueller Zugriffspfad">
+                <span>Nutzer / Gerät</span>
+                <i class="bi bi-arrow-right"></i>
+                <span>SASE</span>
+                <i class="bi bi-arrow-right"></i>
+                <span>Anwendung</span>
+              </div>
+
+              <div class="topology-sim-panel">
+                <div>
+                  <strong>Risiko im Zugriffspfad simulieren</strong>
+                  <span id="simulationHint">Startet eine beispielhafte Policy-Prüfung im aktiven Modus.</span>
+                </div>
+                <button id="simulateThreat" class="btn btn-sm btn-glow">
+                  <i class="bi bi-lightning-charge-fill me-1"></i> Risiko simulieren
+                </button>
               </div>
             </div>
           </div>
@@ -493,22 +503,7 @@
     </section>
   </main>
 
-  <footer class="py-5">
-    <div class="container d-flex flex-column flex-lg-row justify-content-between gap-4 text-secondary">
-      <div class="footer-brand">
-        <img src="icon.png" alt="AU Icon" class="footer-icon" onerror="this.style.display='none'">
-        <div>
-          <strong>AU SASE Lab</strong>
-          <span>Testwebsite für Übungszwecke • Keine offizielle Produktivseite</span>
-        </div>
-      </div>
-      <div class="footer-links">
-        <a href="index.html">Startseite</a>
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-      </div>
-    </div>
-  </footer>
+  <div data-include="footer"></div>
 
   <!-- Bootstrap JS + Eigene Logik -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

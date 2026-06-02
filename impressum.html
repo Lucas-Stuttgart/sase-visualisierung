@@ -17,30 +17,7 @@
   <div class="noise"></div>
   <div class="aurora aurora-1"></div>
   <div class="aurora aurora-2"></div>
-  <nav class="navbar navbar-expand-lg fixed-top nav-blur">
-    <div class="container">
-      <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html" aria-label="Zurück zur Startseite">
-        <img src="icon.png" alt="AU Icon" class="brand-logo" onerror="this.style.display='none'">
-        <span class="brand-mark">AU</span>
-        <span class="brand-wording">
-          <span>AU SASE Lab</span>
-          <small>Übungswebsite</small>
-        </span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div id="topNav" class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-          <li class="nav-item"><a class="nav-link" href="index.html#topology">Topologie</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#capabilities">Bausteine</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#telemetry">Telemetrie</a></li>
-          <li class="nav-item"><a class="nav-link" href="impressum.html">Impressum</a></li>
-          <li class="nav-item"><a class="nav-link" href="datenschutz.html">Datenschutz</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <div data-include="header"></div>
 
   <main class="legal-main">
     <div class="container">
@@ -86,22 +63,8 @@
     </div>
   </main>
 
-  <footer class="py-5">
-    <div class="container d-flex flex-column flex-lg-row justify-content-between gap-4 text-secondary">
-      <div class="footer-brand">
-        <img src="icon.png" alt="AU Icon" class="footer-icon" onerror="this.style.display='none'">
-        <div>
-          <strong>AU SASE Lab</strong>
-          <span>Testwebsite für Übungszwecke • Keine offizielle Produktivseite</span>
-        </div>
-      </div>
-      <div class="footer-links">
-        <a href="index.html">Startseite</a>
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-      </div>
-    </div>
-  </footer>
+  <div data-include="footer"></div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

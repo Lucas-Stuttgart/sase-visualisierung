@@ -1,3 +1,52 @@
+const partialFallbacks = {
+  header: `
+<nav class="navbar navbar-expand-lg fixed-top nav-blur">
+  <div class="container">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html" aria-label="AU SASE Lab Startseite">
+      <img src="icon.png" alt="AU Icon" class="brand-logo" onerror="this.style.display='none'">
+      <span class="brand-wording"><span>AU SASE Lab</span><small>Secure Access Service Edge</small></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav" aria-controls="topNav" aria-expanded="false" aria-label="Navigation umschalten"><span class="navbar-toggler-icon"></span></button>
+    <div id="topNav" class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+        <li class="nav-item"><a class="nav-link" href="index.html#topology">Topologie</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html#capabilities">Bausteine</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html#telemetry">Telemetrie</a></li>
+        <li class="nav-item"><a class="nav-link" href="impressum.html">Impressum</a></li>
+        <li class="nav-item"><a class="nav-link" href="datenschutz.html">Datenschutz</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>`,
+  footer: `
+<footer class="py-5">
+  <div class="container d-flex flex-column flex-lg-row justify-content-between gap-4 text-secondary">
+    <div class="footer-brand">
+      <img src="icon.png" alt="AU Icon" class="footer-icon" onerror="this.style.display='none'">
+      <div><strong>AU SASE Lab</strong><span>Testwebsite für Übungszwecke • Keine offizielle Produktivseite</span></div>
+    </div>
+    <div class="footer-links"><a href="index.html">Startseite</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></div>
+  </div>
+</footer>`
+};
+
+async function loadPartials() {
+  const targets = [...document.querySelectorAll("[data-include]")];
+
+  await Promise.all(targets.map(async target => {
+    const name = target.dataset.include;
+    const url = `partials/${name}.html`;
+
+    try {
+      const response = await fetch(url, { cache: "no-cache" });
+      if (!response.ok) throw new Error(`Partial ${url} nicht gefunden`);
+      target.innerHTML = await response.text();
+    } catch {
+      target.innerHTML = partialFallbacks[name] ?? "";
+    }
+  }));
+}
+
 const services = {
   sase: {
     title: "SASE Policy Enforcement",
@@ -8,26 +57,26 @@ const services = {
   classic: {
     title: "Klassischer Zugriff ohne SASE",
     icon: "bi-hdd-network",
-    text: "Der klassische Remote-Access-Ansatz führt Nutzer häufig erst über VPN und zentrale Sicherheitskomponenten ins Unternehmensnetz, bevor Anwendungen erreicht werden.",
-    tags: ["VPN", "Netzwerkzugang", "Zentrale Firewall", "Proxy", "Backhaul"]
+    text: "Im klassischen Remote-Access-Modell wird der Nutzer häufig zuerst per VPN in das Unternehmensnetz oder Rechenzentrum geführt. Von dort erfolgt die weitere Prüfung und der Zugriff auf Internet-, SaaS- oder private Anwendungen.",
+    tags: ["VPN", "Unternehmensnetz", "Rechenzentrum", "Proxy / Firewall", "Backhaul"]
   },
   vpn: {
-    title: "VPN-Zugang",
+    title: "VPN-Gateway",
     icon: "bi-key",
-    text: "Ein VPN baut einen Tunnel ins Unternehmensnetz auf. Dadurch entsteht oft zunächst Netzwerkzugang, bevor der konkrete Anwendungszugriff weiter eingeschränkt wird.",
-    tags: ["Tunnel", "Remote Access", "Netzwerkfokus", "Gateway"]
+    text: "Ein VPN-Gateway baut einen Tunnel ins Unternehmensnetz auf. Der Zugriff orientiert sich dadurch oft stärker am Netzwerk als an der einzelnen Anwendung.",
+    tags: ["Tunnel", "Remote Access", "Gateway", "Netzwerkzugang"]
   },
   central: {
     title: "Zentrale Firewall / Proxy",
     icon: "bi-building-lock",
-    text: "Im klassischen Modell laufen Prüfungen häufig über zentrale Komponenten wie Firewall, Proxy oder VPN-Gateway. Das kann zu Umwegen führen, besonders bei SaaS- und Internet-Zugriffen.",
-    tags: ["Firewall", "Proxy", "Hub-and-Spoke", "Inspection"]
+    text: "Im klassischen Modell liegen Sicherheitsprüfungen häufig zentral im Unternehmensnetz oder Rechenzentrum, zum Beispiel auf Firewall-, Proxy- oder Secure-Web-Gateway-Systemen.",
+    tags: ["Firewall", "Proxy", "Zentrale Prüfung", "Hub-and-Spoke"]
   },
   backhaul: {
-    title: "WAN-Backhaul",
-    icon: "bi-arrow-repeat",
-    text: "Traffic wird oft erst über das zentrale Netzwerk zurückgeführt, auch wenn die Zielanwendung eigentlich direkt im Internet oder in der Cloud liegt.",
-    tags: ["Umweg", "WAN", "Zentrale Kontrolle", "Latenz"]
+    title: "Unternehmensnetz / Rechenzentrum",
+    icon: "bi-building-gear",
+    text: "Traffic wird oft erst über ein zentrales Unternehmensnetz oder Rechenzentrum geführt. Für Cloud- und Internetzugriffe kann dadurch ein zusätzlicher Umweg entstehen.",
+    tags: ["Datacenter", "WAN", "Backhaul", "Zentrale Kontrolle"]
   },
   sdwan: {
     title: "SD-WAN",
@@ -78,7 +127,7 @@ const services = {
     tags: ["Posture Check", "EDR", "Patch Level", "Geo Signal"]
   },
   branch: {
-    title: "Branch / Standort",
+    title: "Standort / Niederlassung",
     icon: "bi-building-lock",
     text: "Standorte können über SD-WAN- oder andere Anbindungen mit Sicherheitsdiensten und Anwendungen verbunden werden.",
     tags: ["Standort", "WAN", "QoS", "Encrypted Tunnel"]
@@ -86,40 +135,19 @@ const services = {
   cloud: {
     title: "Cloud Apps",
     icon: "bi-cloud-check",
-    text: "SaaS-, IaaS- und private Anwendungen werden in diesem Modell erst nach Policy-Prüfung erreichbar.",
+    text: "SaaS-, IaaS- und private Anwendungen werden im SASE-Modell erst nach Policy-Prüfung erreichbar.",
     tags: ["SaaS", "IaaS", "Private Apps", "API Security"]
   },
   internet: {
-    title: "Internet Egress",
+    title: "Internet / SaaS",
     icon: "bi-globe2",
-    text: "Internet-Traffic kann kategorisiert, geprüft und anhand von Bedrohungs- oder Datenmustern bewertet werden.",
-    tags: ["DNS Control", "Threat Intel", "Content Filter", "Sandboxing"]
+    text: "Internet- und SaaS-Zugriffe können je nach Architektur direkt geprüft oder klassisch über ein zentrales Unternehmensnetz geführt werden.",
+    tags: ["Web", "SaaS", "Egress", "Content Filter"]
   }
 };
 
-const detailTitle = document.querySelector("#detailTitle");
-const detailText = document.querySelector("#detailText");
-const detailIcon = document.querySelector("#detailIcon i");
-const detailTags = document.querySelector("#detailTags");
-const eventLog = document.querySelector("#eventLog");
-const topologyCard = document.querySelector("#topologyCard");
-const threatParticle = document.querySelector("#threatParticle");
-const threatMotion = document.querySelector("#threatMotion");
-const trustRange = document.querySelector("#trustRange");
-const trustLabel = document.querySelector("#trustLabel");
-const trustMeterFill = document.querySelector("#trustMeterFill");
-const topologyModeTitle = document.querySelector("#topologyModeTitle");
-const topologyModeSubtitle = document.querySelector("#topologyModeSubtitle");
-const modeStatus = document.querySelector("#modeStatus");
-const coreNode = document.querySelector("#coreNode");
-const coreNodeIcon = document.querySelector("#coreNodeIcon");
-const coreNodeTitle = document.querySelector("#coreNodeTitle");
-const coreNodeSubtitle = document.querySelector("#coreNodeSubtitle");
-const legendPrimary = document.querySelector("#legendPrimary");
-const legendSecondary = document.querySelector("#legendSecondary");
-const legendThreat = document.querySelector("#legendThreat");
-
 let currentAccessMode = "sase";
+let elements = {};
 
 const pathModeDefinitions = {
   sase: {
@@ -127,21 +155,23 @@ const pathModeDefinitions = {
     pathBranchEdge: "M125 410 C300 395 310 305 470 280",
     pathDeviceEdge: "M165 285 C270 255 350 255 470 270",
     pathEdgeCloud: "M520 260 C640 190 720 140 840 145",
-    pathEdgeApp: "M525 300 C655 345 720 405 842 410"
+    pathEdgeApp: "M525 300 C655 345 720 405 842 410",
+    pathRouteSweep: "M130 155 C285 115 345 235 470 260 C640 190 720 140 840 145"
   },
   classic: {
-    pathUserEdge: "M130 155 C250 165 355 220 470 260",
-    pathBranchEdge: "M125 410 C285 455 355 350 470 292",
-    pathDeviceEdge: "M165 285 C285 300 355 292 470 278",
-    pathEdgeCloud: "M520 255 C610 105 730 92 840 145",
-    pathEdgeApp: "M520 306 C635 470 735 455 842 410"
+    pathUserEdge: "M130 155 C255 158 370 205 470 250",
+    pathBranchEdge: "M125 410 C255 438 370 370 470 305",
+    pathDeviceEdge: "M165 285 C278 294 365 286 470 276",
+    pathEdgeCloud: "M520 245 C610 258 692 210 840 145",
+    pathEdgeApp: "M525 305 C610 372 708 426 842 410",
+    pathRouteSweep: "M130 155 C255 158 370 205 470 250 C540 305 610 376 704 405 C748 416 790 416 842 410"
   }
 };
 
 const modeContent = {
   sase: {
     title: "SASE Zugriffspfad",
-    subtitle: "Identität, Kontext, Policy und Inspection in einer Demo-Ansicht",
+    subtitle: "Identität, Kontext, Policy, SD-WAN und Security-Funktionen in einer Demo-Ansicht",
     status: "Mit SASE",
     coreTitle: "SASE",
     coreSubtitle: "Policy Enforcement",
@@ -150,20 +180,28 @@ const modeContent = {
     legendPrimary: "Direkter, geprüfter Zugriff",
     legendSecondary: "Policy / Inspection",
     legendThreat: "Blockierte Anfrage",
-    detail: "sase"
+    detail: "sase",
+    labels: ["Nutzer / Gerät / Standort", "SASE-Policy", "Cloud / Internet"],
+    steps: ["Nutzer / Gerät", "SASE", "Anwendung"],
+    hint: "Startet eine beispielhafte SASE-Policy-Prüfung im aktiven Zugriffspfad.",
+    eventMessage: "Die Grafik zeigt wieder den kontextbasierten SASE-Zugriffspfad."
   },
   classic: {
     title: "Klassischer Zugriffspfad ohne SASE",
-    subtitle: "VPN, zentrale Security und Backhaul als vereinfachte Vergleichsansicht",
+    subtitle: "Remote User → VPN-Gateway → Unternehmensnetz / Rechenzentrum → Internet oder SaaS",
     status: "Ohne SASE",
-    coreTitle: "VPN / Security",
-    coreSubtitle: "Zentrales Netzwerk",
+    coreTitle: "VPN-Gateway",
+    coreSubtitle: "Unternehmensnetz",
     coreIcon: "bi-hdd-network",
     coreService: "classic",
-    legendPrimary: "Verbindung über VPN / Zentrale",
-    legendSecondary: "Backhaul und zentrale Prüfung",
+    legendPrimary: "VPN-Verbindung ins Unternehmensnetz",
+    legendSecondary: "Zentrale Prüfung / Backhaul",
     legendThreat: "Blockierte Anfrage",
-    detail: "classic"
+    detail: "classic",
+    labels: ["Remote User", "VPN / Unternehmensnetz", "Internet / SaaS"],
+    steps: ["User", "VPN-Gateway", "Unternehmensnetz / Rechenzentrum", "Internet / SaaS"],
+    hint: "Startet eine beispielhafte Prüfung über VPN, zentrale Security und Backhaul.",
+    eventMessage: "Die Grafik zeigt jetzt den klassischen Pfad über VPN-Gateway, Unternehmensnetz und zentrale Prüfung."
   }
 };
 
@@ -172,13 +210,51 @@ const randomBetween = (min, max, decimals = 0) => {
   return Number(value.toFixed(decimals));
 };
 
-function setActiveService(key, options = {}) {
-  const service = services[key] ?? services.sase;
+function collectElements() {
+  elements = {
+    detailTitle: document.querySelector("#detailTitle"),
+    detailText: document.querySelector("#detailText"),
+    detailIcon: document.querySelector("#detailIcon i"),
+    detailTags: document.querySelector("#detailTags"),
+    eventLog: document.querySelector("#eventLog"),
+    topologyCard: document.querySelector("#topologyCard"),
+    threatParticle: document.querySelector("#threatParticle"),
+    threatMotion: document.querySelector("#threatMotion"),
+    trustRange: document.querySelector("#trustRange"),
+    trustLabel: document.querySelector("#trustLabel"),
+    trustMeterFill: document.querySelector("#trustMeterFill"),
+    topologyModeTitle: document.querySelector("#topologyModeTitle"),
+    topologyModeSubtitle: document.querySelector("#topologyModeSubtitle"),
+    modeStatus: document.querySelector("#modeStatus"),
+    coreNode: document.querySelector("#coreNode"),
+    coreNodeIcon: document.querySelector("#coreNodeIcon"),
+    coreNodeTitle: document.querySelector("#coreNodeTitle"),
+    coreNodeSubtitle: document.querySelector("#coreNodeSubtitle"),
+    legendPrimary: document.querySelector("#legendPrimary"),
+    legendSecondary: document.querySelector("#legendSecondary"),
+    legendThreat: document.querySelector("#legendThreat"),
+    routeLabelLeft: document.querySelector("#routeLabelLeft"),
+    routeLabelCore: document.querySelector("#routeLabelCore"),
+    routeLabelRight: document.querySelector("#routeLabelRight"),
+    routeStepper: document.querySelector("#routeStepper"),
+    simulationHint: document.querySelector("#simulationHint"),
+    modeSweep: document.querySelector("#modeSweep"),
+    modeSweepMotion: document.querySelector("#modeSweepMotion")
+  };
+}
 
-  detailTitle.textContent = service.title;
-  detailText.textContent = service.text;
-  detailIcon.className = `bi ${service.icon}`;
-  detailTags.innerHTML = service.tags.map(tag => `<span>${tag}</span>`).join("");
+function hasTopology() {
+  return Boolean(elements.topologyCard && elements.detailTitle && elements.eventLog);
+}
+
+function setActiveService(key, options = {}) {
+  if (!hasTopology()) return;
+
+  const service = services[key] ?? services.sase;
+  elements.detailTitle.textContent = service.title;
+  elements.detailText.textContent = service.text;
+  elements.detailIcon.className = `bi ${service.icon}`;
+  elements.detailTags.innerHTML = service.tags.map(tag => `<span>${tag}</span>`).join("");
 
   document.querySelectorAll("[data-service]").forEach(item => {
     item.classList.toggle("active", item.dataset.service === key);
@@ -190,32 +266,36 @@ function setActiveService(key, options = {}) {
 }
 
 function addEvent(title, message, variant = "") {
+  if (!elements.eventLog) return;
+
   const item = document.createElement("div");
   item.className = `event-item ${variant}`;
   item.innerHTML = `<strong>${title}</strong><small>${message}</small>`;
-  eventLog.prepend(item);
+  elements.eventLog.prepend(item);
 
-  const items = eventLog.querySelectorAll(".event-item");
-  if (items.length > 7) {
-    items[items.length - 1].remove();
-  }
+  const items = elements.eventLog.querySelectorAll(".event-item");
+  if (items.length > 7) items[items.length - 1].remove();
 }
 
 function updateTrust(value) {
-  trustMeterFill.style.width = `${value}%`;
+  if (!elements.trustMeterFill || !elements.trustLabel) return;
+
+  elements.trustMeterFill.style.width = `${value}%`;
 
   if (value < 34) {
-    trustLabel.textContent = "Niedriges Risiko";
-    trustLabel.className = "badge text-bg-success";
+    elements.trustLabel.textContent = "Niedriges Risiko";
+    elements.trustLabel.className = "badge text-bg-success";
   } else if (value < 70) {
-    trustLabel.textContent = "Adaptive Prüfung";
-    trustLabel.className = "badge text-bg-warning";
+    elements.trustLabel.textContent = "Adaptive Prüfung";
+    elements.trustLabel.className = "badge text-bg-warning";
   } else {
-    trustLabel.textContent = "Hohes Risiko";
-    trustLabel.className = "badge text-bg-danger";
+    elements.trustLabel.textContent = "Hohes Risiko";
+    elements.trustLabel.className = "badge text-bg-danger";
   }
 
-  document.querySelector("[data-counter='risk']").textContent = String(value).padStart(2, "0");
+  document.querySelectorAll("[data-counter='risk']").forEach(element => {
+    element.textContent = String(value).padStart(2, "0");
+  });
 }
 
 function animateCounter(element, target) {
@@ -228,13 +308,9 @@ function animateCounter(element, target) {
     const eased = 1 - Math.pow(1 - progress, 3);
     const value = current + (target - current) * eased;
 
-    if (target >= 1000) {
-      element.textContent = Math.round(value).toLocaleString("de-DE");
-    } else if (String(target).includes(".")) {
-      element.textContent = value.toFixed(1);
-    } else {
-      element.textContent = Math.round(value);
-    }
+    if (target >= 1000) element.textContent = Math.round(value).toLocaleString("de-DE");
+    else if (String(target).includes(".")) element.textContent = value.toFixed(1);
+    else element.textContent = Math.round(value);
 
     if (progress < 1) requestAnimationFrame(tick);
   }
@@ -253,26 +329,62 @@ function refreshMetrics() {
   };
 
   Object.entries(metricTargets).forEach(([key, value]) => {
-    document.querySelectorAll(`[data-counter="${key}"]`).forEach(element => {
-      animateCounter(element, value);
-    });
+    document.querySelectorAll(`[data-counter="${key}"]`).forEach(element => animateCounter(element, value));
   });
 }
 
 function applyPathMode(mode) {
-  Object.entries(pathModeDefinitions[mode]).forEach(([id, d]) => {
+  const definition = pathModeDefinitions[mode] ?? pathModeDefinitions.sase;
+  Object.entries(definition).forEach(([id, d]) => {
     document.querySelector(`#${id}`)?.setAttribute("d", d);
   });
 }
 
+function updateRouteStepper(steps) {
+  if (!elements.routeStepper) return;
+
+  elements.routeStepper.innerHTML = steps
+    .map((step, index) => {
+      const separator = index < steps.length - 1 ? '<i class="bi bi-arrow-right"></i>' : "";
+      return `<span>${step}</span>${separator}`;
+    })
+    .join("");
+}
+
+function restartMotionAnimations() {
+  document.querySelectorAll("animateMotion").forEach(animation => {
+    try { animation.beginElement(); } catch { /* SMIL kann in restriktiven Umgebungen blockiert sein. */ }
+  });
+}
+
+function runModeSweep() {
+  if (!elements.topologyCard) return;
+
+  elements.topologyCard.classList.add("transition-sweep");
+  elements.modeSweep?.classList.add("active");
+
+  try { elements.modeSweepMotion?.beginElement(); } catch { /* optional */ }
+
+  window.setTimeout(() => {
+    elements.topologyCard?.classList.remove("transition-sweep");
+    elements.modeSweep?.classList.remove("active");
+  }, 1500);
+}
+
 function setAccessMode(mode, options = {}) {
+  if (!hasTopology()) return;
+  if (!modeContent[mode]) mode = "sase";
+
+  const previousMode = currentAccessMode;
   currentAccessMode = mode;
   const content = modeContent[mode];
+  const isClassic = mode === "classic";
+  const shouldAnimate = previousMode !== mode && !options.silent;
 
-  topologyCard.dataset.accessMode = mode;
-  topologyCard.classList.toggle("classic-mode", mode === "classic");
-  topologyCard.classList.add("mode-switching");
-  setTimeout(() => topologyCard.classList.remove("mode-switching"), 560);
+  if (shouldAnimate) elements.topologyCard.classList.add("mode-switching");
+
+  elements.topologyCard.dataset.accessMode = mode;
+  elements.topologyCard.classList.toggle("classic-mode", isClassic);
 
   document.querySelectorAll(".access-mode-btn").forEach(button => {
     const active = button.dataset.accessMode === mode;
@@ -280,60 +392,68 @@ function setAccessMode(mode, options = {}) {
     button.setAttribute("aria-pressed", String(active));
   });
 
-  topologyModeTitle.textContent = content.title;
-  topologyModeSubtitle.textContent = content.subtitle;
-  modeStatus.textContent = content.status;
-  coreNode.dataset.service = content.coreService;
-  coreNodeIcon.className = `bi ${content.coreIcon}`;
-  coreNodeTitle.textContent = content.coreTitle;
-  coreNodeSubtitle.textContent = content.coreSubtitle;
-  legendPrimary.innerHTML = `<i class="legend-dot normal"></i> ${content.legendPrimary}`;
-  legendSecondary.innerHTML = `<i class="legend-dot inspect"></i> ${content.legendSecondary}`;
-  legendThreat.innerHTML = `<i class="legend-dot threat"></i> ${content.legendThreat}`;
+  elements.topologyModeTitle.textContent = content.title;
+  elements.topologyModeSubtitle.textContent = content.subtitle;
+  elements.modeStatus.textContent = content.status;
+  elements.coreNode.dataset.service = content.coreService;
+  elements.coreNodeIcon.className = `bi ${content.coreIcon}`;
+  elements.coreNodeTitle.textContent = content.coreTitle;
+  elements.coreNodeSubtitle.textContent = content.coreSubtitle;
+  elements.legendPrimary.innerHTML = `<i class="legend-dot normal"></i> ${content.legendPrimary}`;
+  elements.legendSecondary.innerHTML = `<i class="legend-dot inspect"></i> ${content.legendSecondary}`;
+  elements.legendThreat.innerHTML = `<i class="legend-dot threat"></i> ${content.legendThreat}`;
+
+  elements.routeLabelLeft.textContent = content.labels[0];
+  elements.routeLabelCore.textContent = content.labels[1];
+  elements.routeLabelRight.textContent = content.labels[2];
+  elements.simulationHint.textContent = content.hint;
+  updateRouteStepper(content.steps);
 
   applyPathMode(mode);
   setActiveService(content.detail, { silent: true });
+  restartMotionAnimations();
+
+  if (shouldAnimate) {
+    runModeSweep();
+    window.setTimeout(() => elements.topologyCard?.classList.remove("mode-switching"), 720);
+  }
 
   if (!options.silent) {
-    const message = mode === "classic"
-      ? "Die Grafik zeigt jetzt VPN, zentrale Security und Backhaul als klassische Variante."
-      : "Die Grafik zeigt wieder den kontextbasierten SASE-Zugriffspfad.";
-    addEvent("Zugriffsmodus gewechselt", message, mode === "classic" ? "" : "success");
+    addEvent("Zugriffsmodus gewechselt", content.eventMessage, isClassic ? "" : "success");
+    refreshMetrics();
   }
 }
 
 function simulateThreat() {
-  topologyCard.classList.add("threat-mode");
-  threatParticle.classList.add("active");
+  if (!hasTopology()) return;
+
+  elements.topologyCard.classList.add("threat-mode");
+  elements.threatParticle?.classList.add("active");
 
   addEvent("Demo-Anomalie erkannt", "Beispielhafter Login-Kontext mit erhöhtem Risiko.", "danger");
 
-  try {
-    threatMotion.beginElement();
-  } catch {
-    // Einige Browser blockieren SVG beginElement bei sehr restriktiven Einstellungen.
-  }
+  try { elements.threatMotion?.beginElement(); } catch { /* optional */ }
 
   if (currentAccessMode === "classic") {
     setActiveService("vpn");
 
     setTimeout(() => {
       setActiveService("central");
-      addEvent("Zentrale Prüfung", "Die Demo-Anfrage wird über VPN und zentrale Security-Komponenten geführt.", "danger");
-      trustRange.value = 72;
+      addEvent("Zentrale Prüfung", "Die Demo-Anfrage wird über VPN-Gateway und zentrale Security-Komponenten geführt.", "danger");
+      if (elements.trustRange) elements.trustRange.value = 72;
       updateTrust(72);
     }, 950);
 
     setTimeout(() => {
       setActiveService("backhaul");
-      addEvent("Backhaul sichtbar", "Der Beispieltraffic nimmt den Umweg über das zentrale Netzwerk.", "danger");
+      addEvent("Backhaul sichtbar", "Der Beispieltraffic läuft über Unternehmensnetz / Rechenzentrum weiter Richtung Internet oder SaaS.", "danger");
     }, 1850);
 
     setTimeout(() => {
       setActiveService("classic");
       addEvent("Klassische Policy greift", "Die Demo-Anfrage wird zentral geprüft und anschließend blockiert.", "success");
-      topologyCard.classList.remove("threat-mode");
-      threatParticle.classList.remove("active");
+      elements.topologyCard.classList.remove("threat-mode");
+      elements.threatParticle?.classList.remove("active");
     }, 3300);
 
     return;
@@ -344,7 +464,7 @@ function simulateThreat() {
   setTimeout(() => {
     setActiveService("ztna");
     addEvent("ZTNA-Prüfung", "Die Demo-Session erhält eine zusätzliche Prüfung und eingeschränkten App-Zugriff.", "danger");
-    trustRange.value = 78;
+    if (elements.trustRange) elements.trustRange.value = 78;
     updateTrust(78);
   }, 950);
 
@@ -356,8 +476,8 @@ function simulateThreat() {
   setTimeout(() => {
     setActiveService("sase");
     addEvent("Anfrage blockiert", "Die Demo-Policy blockiert den riskanten Vorgang und lässt unauffällige Sessions weiterlaufen.", "success");
-    topologyCard.classList.remove("threat-mode");
-    threatParticle.classList.remove("active");
+    elements.topologyCard.classList.remove("threat-mode");
+    elements.threatParticle?.classList.remove("active");
   }, 3300);
 }
 
@@ -373,7 +493,7 @@ function filterTelemetry(filter) {
 }
 
 function resetDashboard() {
-  trustRange.value = 22;
+  if (elements.trustRange) elements.trustRange.value = 22;
   updateTrust(22);
   setAccessMode("sase", { silent: true });
   filterTelemetry("all");
@@ -403,14 +523,14 @@ function bindInteractions() {
     });
   });
 
-  document.querySelector("#simulateThreat").addEventListener("click", simulateThreat);
-  document.querySelector("#resetBtn").addEventListener("click", resetDashboard);
+  document.querySelector("#simulateThreat")?.addEventListener("click", simulateThreat);
+  document.querySelector("#resetBtn")?.addEventListener("click", resetDashboard);
 
   document.querySelectorAll(".control-chip").forEach(button => {
     button.addEventListener("click", () => filterTelemetry(button.dataset.filter));
   });
 
-  trustRange.addEventListener("input", event => updateTrust(Number(event.target.value)));
+  elements.trustRange?.addEventListener("input", event => updateTrust(Number(event.target.value)));
 }
 
 function seedEvents() {
@@ -419,16 +539,9 @@ function seedEvents() {
   addEvent("SWG Inspection", "Web-Request wurde in der Demo kategorisiert und freigegeben.");
 }
 
-function boot() {
-  bindInteractions();
-  bindAccessModeSwitch();
-  setAccessMode("sase", { silent: true });
-  updateTrust(Number(trustRange.value));
-  seedEvents();
+function initTooltips() {
+  if (!window.bootstrap?.Tooltip) return;
 
-  setInterval(refreshMetrics, 3600);
-
-  // Bootstrap Tooltips für interaktive Cards.
   document.querySelectorAll(".cap-card").forEach(card => {
     card.setAttribute("data-bs-toggle", "tooltip");
     card.setAttribute("data-bs-title", `Details zu ${services[card.dataset.service]?.title ?? "SASE"} anzeigen`);
@@ -436,6 +549,22 @@ function boot() {
 
   [...document.querySelectorAll('[data-bs-toggle="tooltip"]')]
     .map(element => new bootstrap.Tooltip(element));
+}
+
+async function boot() {
+  await loadPartials();
+  collectElements();
+  bindInteractions();
+  bindAccessModeSwitch();
+
+  if (hasTopology()) {
+    setAccessMode("sase", { silent: true });
+    updateTrust(Number(elements.trustRange?.value ?? 22));
+    seedEvents();
+    setInterval(refreshMetrics, 3600);
+  }
+
+  initTooltips();
 }
 
 document.addEventListener("DOMContentLoaded", boot);
