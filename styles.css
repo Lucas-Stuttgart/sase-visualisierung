@@ -1393,3 +1393,43 @@ footer {
   }
 }
 
+
+/* v1.5: Browser-Fokusrahmen in der SVG-Topologie ausblenden.
+   Die interaktiven Punkte bleiben per Glow/Hover erkennbar, aber ohne weißen Kasten. */
+#saseSvg [tabindex],
+#saseSvg [tabindex]:focus,
+#saseSvg [tabindex]:focus-visible,
+#saseSvg .node,
+#saseSvg .node:focus,
+#saseSvg .node:focus-visible,
+#saseSvg .service-node,
+#saseSvg .service-node:focus,
+#saseSvg .service-node:focus-visible,
+#saseSvg .classic-node,
+#saseSvg .classic-node:focus,
+#saseSvg .classic-node:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#saseSvg,
+#saseSvg * {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+#saseSvg .node:focus circle,
+#saseSvg .node:focus-visible circle,
+#saseSvg .service-node:focus circle,
+#saseSvg .service-node:focus-visible circle {
+  stroke: var(--cyan);
+  filter: url(#softGlow);
+}
+
+#saseSvg .classic-node:focus circle,
+#saseSvg .classic-node:focus-visible circle {
+  fill: rgba(251, 191, 36, 0.22);
+  stroke: var(--yellow);
+  filter: url(#softGlow);
+}
