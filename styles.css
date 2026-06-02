@@ -1320,73 +1320,9 @@ footer {
   100% { filter: saturate(1) blur(0); opacity: 1; }
 }
 
-.route-highlight-line {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.16);
-  stroke-width: 9;
-  stroke-linecap: round;
-  opacity: 0.56;
-  filter: url(#softGlow);
-}
-
-.topology-card.classic-mode .route-highlight-line {
-  stroke: rgba(251, 191, 36, 0.24);
-}
+/* Zusätzliche helle Routen-Overlay-Linie entfernt. */
 
 
-.route-labels text {
-  text-anchor: middle;
-  fill: rgba(226, 232, 240, 0.76);
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.015em;
-  paint-order: stroke;
-  stroke: rgba(2, 6, 23, 0.82);
-  stroke-width: 4px;
-}
-
-.topology-card.classic-mode .route-labels text {
-  fill: rgba(254, 243, 199, 0.86);
-}
-
-.route-stepper {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.9rem;
-  padding: 0.75rem;
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  border-radius: 1rem;
-  background: rgba(2, 6, 23, 0.30);
-  color: var(--muted);
-  font-size: 0.82rem;
-}
-
-.route-stepper span {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2rem;
-  padding: 0.35rem 0.65rem;
-  border-radius: 999px;
-  border: 1px solid rgba(0, 153, 181, 0.18);
-  background: rgba(0, 153, 181, 0.09);
-  color: var(--au-white);
-  font-weight: 800;
-}
-
-.route-stepper i {
-  color: var(--au-cyan);
-}
-
-.topology-card.classic-mode .route-stepper span {
-  border-color: rgba(251, 191, 36, 0.28);
-  background: rgba(251, 191, 36, 0.10);
-}
-
-.topology-card.classic-mode .route-stepper i {
-  color: var(--yellow);
-}
 
 .topology-sim-panel {
   display: flex;
@@ -1444,17 +1380,5 @@ footer {
   .topology-sim-panel .btn {
     width: 100%;
   }
-
-  .route-stepper {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .route-stepper i {
-    transform: rotate(90deg);
-    align-self: center;
-  }
 }
 
-/* Route-Zusatzbeschriftungen sind bewusst deaktiviert: Die Schritte stehen im Stepper darunter. */
-.route-labels { display: none; }
