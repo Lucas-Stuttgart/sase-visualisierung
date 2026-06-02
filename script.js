@@ -151,6 +151,8 @@ let elements = {};
 
 const pathModeDefinitions = {
   sase: {
+    coreTransform: "translate(495 278)",
+    classicRingTransform: "translate(495 278)",
     pathUserEdge: "M130 155 C285 115 345 235 470 260",
     pathBranchEdge: "M125 410 C300 395 310 305 470 280",
     pathDeviceEdge: "M165 285 C270 255 350 255 470 270",
@@ -159,12 +161,14 @@ const pathModeDefinitions = {
     pathRouteSweep: "M130 155 C285 115 345 235 470 260 C640 190 720 140 840 145"
   },
   classic: {
-    pathUserEdge: "M130 155 C250 165 350 225 470 260",
-    pathBranchEdge: "M125 410 C255 405 350 330 470 290",
-    pathDeviceEdge: "M165 285 C280 292 365 286 470 276",
-    pathEdgeCloud: "M525 260 C625 238 730 168 840 145",
-    pathEdgeApp: "M525 296 C590 315 650 330 725 370 C770 394 805 405 842 410",
-    pathRouteSweep: "M130 155 C250 165 350 225 470 260 C615 258 735 330 842 410"
+    coreTransform: "translate(390 278)",
+    classicRingTransform: "translate(390 278)",
+    pathUserEdge: "M130 155 C220 178 300 230 365 266",
+    pathBranchEdge: "M125 410 C220 390 305 328 365 290",
+    pathDeviceEdge: "M165 285 C235 285 305 282 365 278",
+    pathEdgeCloud: "M452 258 L840 145",
+    pathEdgeApp: "M452 298 L842 410",
+    pathRouteSweep: "M130 155 C220 178 300 230 365 266 L840 145"
   }
 };
 
@@ -230,6 +234,7 @@ function collectElements() {
     coreNodeIcon: document.querySelector("#coreNodeIcon"),
     coreNodeTitle: document.querySelector("#coreNodeTitle"),
     coreNodeSubtitle: document.querySelector("#coreNodeSubtitle"),
+    classicRing: document.querySelector("#classicRing"),
     legendPrimary: document.querySelector("#legendPrimary"),
     legendSecondary: document.querySelector("#legendSecondary"),
     legendThreat: document.querySelector("#legendThreat"),
@@ -333,7 +338,17 @@ function refreshMetrics() {
 
 function applyPathMode(mode) {
   const definition = pathModeDefinitions[mode] ?? pathModeDefinitions.sase;
+
+  if (definition.coreTransform) {
+    elements.coreNode?.setAttribute("transform", definition.coreTransform);
+  }
+
+  if (definition.classicRingTransform) {
+    elements.classicRing?.setAttribute("transform", definition.classicRingTransform);
+  }
+
   Object.entries(definition).forEach(([id, d]) => {
+    if (id.endsWith("Transform")) return;
     document.querySelector(`#${id}`)?.setAttribute("d", d);
   });
 }
@@ -350,17 +365,9 @@ function updateRouteStepper(steps) {
 }
 
 
-function setAccessMode(mode, options = {}) {
-  if (!hasTopology()) return;
-  if (!modeContent[mode]) mode = "sase";
-
-  const previousMode = currentAccessMode;
-  currentAccessMode = mode;
+function renderAccessMode(mode, options = {}) {
   const content = modeContent[mode];
   const isClassic = mode === "classic";
-  const shouldAnimate = previousMode !== mode && !options.silent;
-
-  if (shouldAnimate) elements.topologyCard.classList.add("mode-switching");
 
   elements.topologyCard.dataset.accessMode = mode;
   elements.topologyCard.classList.toggle("classic-mode", isClassic);
@@ -390,15 +397,43 @@ function setAccessMode(mode, options = {}) {
 
   applyPathMode(mode);
   setActiveService(content.detail, { silent: true });
+}
 
-  if (shouldAnimate) {
-    window.setTimeout(() => elements.topologyCard?.classList.remove("mode-switching"), 720);
+function setAccessMode(mode, options = {}) {
+  if (!hasTopology()) return;
+  if (!modeContent[mode]) mode = "sase";
+
+  const previousMode = currentAccessMode;
+  const shouldAnimate = previousMode !== mode && !options.silent;
+  currentAccessMode = mode;
+
+  if (!shouldAnimate) {
+    renderAccessMode(mode, options);
+    return;
   }
 
-  if (!options.silent) {
-    addEvent("Zugriffsmodus gewechselt", content.eventMessage, isClassic ? "" : "success");
-    refreshMetrics();
-  }
+  // Reihenfolge beim Umschalten:
+  // 1. Knoten/Punkte sofort ausblenden.
+  // 2. Danach neue Pfade/Inhalte setzen.
+  // 3. Erst dann startet die Scan-Welle und die Punkte blenden wieder ein.
+  elements.topologyCard.classList.add("mode-points-hidden");
+
+  window.setTimeout(() => {
+    renderAccessMode(mode, options);
+    elements.topologyCard.classList.add("mode-switching");
+
+    window.setTimeout(() => {
+      elements.topologyCard.classList.remove("mode-points-hidden");
+      elements.topologyCard.classList.add("mode-points-returning");
+    }, 40);
+
+    window.setTimeout(() => {
+      elements.topologyCard.classList.remove("mode-switching", "mode-points-returning");
+    }, 780);
+  }, 120);
+
+  addEvent("Zugriffsmodus gewechselt", modeContent[mode].eventMessage, mode === "classic" ? "" : "success");
+  refreshMetrics();
 }
 
 function simulateThreat() {
