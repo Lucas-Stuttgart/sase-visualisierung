@@ -18,9 +18,9 @@ Statische Demo-Website für eine SASE-Architektur im AU-Farblook mit getrennten 
 ## Inhalt
 
 - Bootstrap 5 im Darkmode
-- Animierte SASE-Topologie mit integriertem Umschalter zwischen „Mit SASE“ und „Ohne SASE / Klassisch“
+- Animierte SASE-Topologie mit integriertem Umschalter zwischen „Mit SASE“ und „Ohne SASE“
 - Umschaltanimation mit Scan-Effekt und weich verblassenden Elementen
-- Klassischer Pfad: User → VPN-Gateway → Unternehmensnetz/Rechenzentrum → Internet/SaaS
+- Pfad ohne SASE: User → VPN-Gateway → Unternehmensnetz/Rechenzentrum → Internet/SaaS
 - SASE-Pfad: Nutzer/Gerät → SASE Policy Enforcement → Anwendung
 - Klickbare SASE-Bausteine: SD-WAN, ZTNA, SWG, CASB, FWaaS, DLP
 - Simulierbares Risiko direkt unter dem Zugriffspfad

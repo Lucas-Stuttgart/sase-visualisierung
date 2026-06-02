@@ -1189,7 +1189,6 @@ footer {
 
 .topology-card.mode-switching .edge-node,
 .topology-card.mode-switching .paths,
-.topology-card.mode-switching .packets,
 .topology-card.mode-switching .service-ring,
 .topology-card.mode-switching .classic-ring {
   animation: modeFlash 520ms ease;
@@ -1199,6 +1198,12 @@ footer {
   0% { opacity: 0.15; filter: blur(2px); }
   55% { opacity: 0.45; filter: blur(1px); }
   100% { opacity: 1; filter: blur(0); }
+}
+
+.topology-card.mode-switching .packets,
+.topology-card.mode-switching .packet {
+  opacity: 0 !important;
+  transition: none !important;
 }
 
 .classic-node {
@@ -1285,7 +1290,7 @@ footer {
   min-height: 4.5rem;
 }
 
-/* Verbesserte Umschaltanimation für SASE/Klassisch */
+/* Verbesserte Umschaltanimation für SASE/Ohne SASE */
 .svg-shell {
   position: relative;
 }

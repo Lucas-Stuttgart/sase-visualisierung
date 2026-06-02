@@ -55,9 +55,9 @@ const services = {
     tags: ["Unified Policy", "Policy Enforcement", "TLS Inspection", "Context Engine", "Zero Trust"]
   },
   classic: {
-    title: "Klassischer Zugriff ohne SASE",
+    title: "Zugriff ohne SASE",
     icon: "bi-hdd-network",
-    text: "Im klassischen Remote-Access-Modell wird der Nutzer häufig zuerst per VPN in das Unternehmensnetz oder Rechenzentrum geführt. Von dort erfolgt die weitere Prüfung und der Zugriff auf Internet-, SaaS- oder private Anwendungen.",
+    text: "Ohne SASE wird der Nutzer häufig zuerst per VPN in das Unternehmensnetz oder Rechenzentrum geführt. Von dort erfolgt die weitere Prüfung und der Zugriff auf Internet-, SaaS- oder private Anwendungen.",
     tags: ["VPN", "Unternehmensnetz", "Rechenzentrum", "Proxy / Firewall", "Backhaul"]
   },
   vpn: {
@@ -69,7 +69,7 @@ const services = {
   central: {
     title: "Zentrale Firewall / Proxy",
     icon: "bi-building-lock",
-    text: "Im klassischen Modell liegen Sicherheitsprüfungen häufig zentral im Unternehmensnetz oder Rechenzentrum, zum Beispiel auf Firewall-, Proxy- oder Secure-Web-Gateway-Systemen.",
+    text: "Ohne SASE liegen Sicherheitsprüfungen häufig zentral im Unternehmensnetz oder Rechenzentrum, zum Beispiel auf Firewall-, Proxy- oder Secure-Web-Gateway-Systemen.",
     tags: ["Firewall", "Proxy", "Zentrale Prüfung", "Hub-and-Spoke"]
   },
   backhaul: {
@@ -141,7 +141,7 @@ const services = {
   internet: {
     title: "Internet / SaaS",
     icon: "bi-globe2",
-    text: "Internet- und SaaS-Zugriffe können je nach Architektur direkt geprüft oder klassisch über ein zentrales Unternehmensnetz geführt werden.",
+    text: "Internet- und SaaS-Zugriffe können je nach Architektur direkt geprüft oder ohne SASE über ein zentrales Unternehmensnetz geführt werden.",
     tags: ["Web", "SaaS", "Egress", "Content Filter"]
   }
 };
@@ -162,9 +162,9 @@ const pathModeDefinitions = {
     pathUserEdge: "M130 155 C250 165 350 225 470 260",
     pathBranchEdge: "M125 410 C255 405 350 330 470 290",
     pathDeviceEdge: "M165 285 C280 292 365 286 470 276",
-    pathEdgeCloud: "M525 260 C590 250 632 250 660 274 C735 250 780 195 840 145",
+    pathEdgeCloud: "M525 260 C625 238 730 168 840 145",
     pathEdgeApp: "M525 296 C590 315 650 330 725 370 C770 394 805 405 842 410",
-    pathRouteSweep: "M130 155 C250 165 350 225 470 260 C560 266 610 270 660 274 C735 300 790 370 842 410"
+    pathRouteSweep: "M130 155 C250 165 350 225 470 260 C615 258 735 330 842 410"
   }
 };
 
@@ -187,7 +187,7 @@ const modeContent = {
     eventMessage: "Die Grafik zeigt wieder den kontextbasierten SASE-Zugriffspfad."
   },
   classic: {
-    title: "Klassischer Zugriffspfad ohne SASE",
+    title: "Zugriffspfad ohne SASE",
     subtitle: "Remote User → VPN-Gateway → Unternehmensnetz/Rechenzentrum → Internet oder SaaS",
     status: "Ohne SASE",
     coreTitle: "VPN-Gateway",
@@ -201,7 +201,7 @@ const modeContent = {
     labels: ["", "", ""],
     steps: ["User", "VPN-Gateway", "Unternehmensnetz/Rechenzentrum", "Internet/SaaS"],
     hint: "Startet eine beispielhafte Prüfung über VPN, zentrale Security und Backhaul.",
-    eventMessage: "Die Grafik zeigt jetzt den klassischen Pfad über VPN-Gateway, Unternehmensnetz und zentrale Prüfung."
+    eventMessage: "Die Grafik zeigt jetzt den Zugriffspfad ohne SASE über VPN-Gateway, Unternehmensnetz und zentrale Prüfung."
   }
 };
 
@@ -428,7 +428,7 @@ function simulateThreat() {
 
     setTimeout(() => {
       setActiveService("classic");
-      addEvent("Klassische Policy greift", "Die Demo-Anfrage wird zentral geprüft und anschließend blockiert.", "success");
+      addEvent("Policy ohne SASE greift", "Die Demo-Anfrage wird zentral geprüft und anschließend blockiert.", "success");
       elements.topologyCard.classList.remove("threat-mode");
       elements.threatParticle?.classList.remove("active");
     }, 3300);
