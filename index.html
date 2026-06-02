@@ -159,13 +159,6 @@
                     <use href="#pathRouteSweep" class="route-highlight-line"></use>
                   </g>
 
-                  <g id="modeSweep" class="mode-sweep" aria-hidden="true">
-                    <circle r="8"></circle>
-                    <circle r="22" class="mode-sweep-pulse"></circle>
-                    <animateMotion id="modeSweepMotion" dur="1.45s" begin="indefinite" fill="freeze">
-                      <mpath href="#pathRouteSweep"/>
-                    </animateMotion>
-                  </g>
 
                   <g class="packets">
                     <circle r="5" class="packet packet-a">
@@ -283,27 +276,23 @@
                   </g>
 
                   <g class="classic-ring classic-only" transform="translate(495 278)" aria-label="Klassische Zugriffskomponenten">
-                    <g class="classic-node" data-service="vpn" transform="translate(-120 -108)" tabindex="0">
-                      <circle r="36"></circle>
-                      <text y="6">VPN</text>
+                    <g class="classic-node" data-service="vpn" transform="translate(-142 -6)" tabindex="0">
+                      <circle r="34"></circle>
+                      <text y="-2">VPN</text>
+                      <text y="13" class="subtext">Tunnel</text>
                     </g>
-                    <g class="classic-node" data-service="central" transform="translate(124 -92)" tabindex="0">
+                    <g class="classic-node" data-service="backhaul" transform="translate(158 -4)" tabindex="0">
+                      <circle r="42"></circle>
+                      <text y="-4">Netz</text>
+                      <text y="12" class="subtext">RZ</text>
+                    </g>
+                    <g class="classic-node" data-service="central" transform="translate(230 92)" tabindex="0">
                       <circle r="38"></circle>
                       <text y="-2">Proxy</text>
                       <text y="13" class="subtext">FW</text>
                     </g>
-                    <g class="classic-node" data-service="backhaul" transform="translate(0 156)" tabindex="0">
-                      <circle r="38"></circle>
-                      <text y="-2">DC</text>
-                      <text y="13" class="subtext">Hub</text>
-                    </g>
                   </g>
 
-                  <g class="route-labels" aria-hidden="true">
-                    <text id="routeLabelLeft" x="118" y="72">Nutzer / Gerät / Standort</text>
-                    <text id="routeLabelCore" x="496" y="94">SASE-Policy</text>
-                    <text id="routeLabelRight" x="840" y="72">Cloud / Internet</text>
-                  </g>
                 </svg>
               </div>
 

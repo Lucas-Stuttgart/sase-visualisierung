@@ -159,12 +159,12 @@ const pathModeDefinitions = {
     pathRouteSweep: "M130 155 C285 115 345 235 470 260 C640 190 720 140 840 145"
   },
   classic: {
-    pathUserEdge: "M130 155 C255 158 370 205 470 250",
-    pathBranchEdge: "M125 410 C255 438 370 370 470 305",
-    pathDeviceEdge: "M165 285 C278 294 365 286 470 276",
-    pathEdgeCloud: "M520 245 C610 258 692 210 840 145",
-    pathEdgeApp: "M525 305 C610 372 708 426 842 410",
-    pathRouteSweep: "M130 155 C255 158 370 205 470 250 C540 305 610 376 704 405 C748 416 790 416 842 410"
+    pathUserEdge: "M130 155 C250 165 350 225 470 260",
+    pathBranchEdge: "M125 410 C255 405 350 330 470 290",
+    pathDeviceEdge: "M165 285 C280 292 365 286 470 276",
+    pathEdgeCloud: "M525 260 C590 250 632 250 660 274 C735 250 780 195 840 145",
+    pathEdgeApp: "M525 296 C590 315 650 330 725 370 C770 394 805 405 842 410",
+    pathRouteSweep: "M130 155 C250 165 350 225 470 260 C560 266 610 270 660 274 C735 300 790 370 842 410"
   }
 };
 
@@ -181,14 +181,14 @@ const modeContent = {
     legendSecondary: "Policy / Inspection",
     legendThreat: "Blockierte Anfrage",
     detail: "sase",
-    labels: ["Nutzer / Gerät / Standort", "SASE-Policy", "Cloud / Internet"],
+    labels: ["", "", ""],
     steps: ["Nutzer / Gerät", "SASE", "Anwendung"],
     hint: "Startet eine beispielhafte SASE-Policy-Prüfung im aktiven Zugriffspfad.",
     eventMessage: "Die Grafik zeigt wieder den kontextbasierten SASE-Zugriffspfad."
   },
   classic: {
     title: "Klassischer Zugriffspfad ohne SASE",
-    subtitle: "Remote User → VPN-Gateway → Unternehmensnetz / Rechenzentrum → Internet oder SaaS",
+    subtitle: "Remote User → VPN-Gateway → Unternehmensnetz/Rechenzentrum → Internet oder SaaS",
     status: "Ohne SASE",
     coreTitle: "VPN-Gateway",
     coreSubtitle: "Unternehmensnetz",
@@ -198,8 +198,8 @@ const modeContent = {
     legendSecondary: "Zentrale Prüfung / Backhaul",
     legendThreat: "Blockierte Anfrage",
     detail: "classic",
-    labels: ["Remote User", "VPN / Unternehmensnetz", "Internet / SaaS"],
-    steps: ["User", "VPN-Gateway", "Unternehmensnetz / Rechenzentrum", "Internet / SaaS"],
+    labels: ["", "", ""],
+    steps: ["User", "VPN-Gateway", "Unternehmensnetz/Rechenzentrum", "Internet/SaaS"],
     hint: "Startet eine beispielhafte Prüfung über VPN, zentrale Security und Backhaul.",
     eventMessage: "Die Grafik zeigt jetzt den klassischen Pfad über VPN-Gateway, Unternehmensnetz und zentrale Prüfung."
   }
@@ -237,9 +237,7 @@ function collectElements() {
     routeLabelCore: document.querySelector("#routeLabelCore"),
     routeLabelRight: document.querySelector("#routeLabelRight"),
     routeStepper: document.querySelector("#routeStepper"),
-    simulationHint: document.querySelector("#simulationHint"),
-    modeSweep: document.querySelector("#modeSweep"),
-    modeSweepMotion: document.querySelector("#modeSweepMotion")
+    simulationHint: document.querySelector("#simulationHint")
   };
 }
 
@@ -351,25 +349,6 @@ function updateRouteStepper(steps) {
     .join("");
 }
 
-function restartMotionAnimations() {
-  document.querySelectorAll("animateMotion").forEach(animation => {
-    try { animation.beginElement(); } catch { /* SMIL kann in restriktiven Umgebungen blockiert sein. */ }
-  });
-}
-
-function runModeSweep() {
-  if (!elements.topologyCard) return;
-
-  elements.topologyCard.classList.add("transition-sweep");
-  elements.modeSweep?.classList.add("active");
-
-  try { elements.modeSweepMotion?.beginElement(); } catch { /* optional */ }
-
-  window.setTimeout(() => {
-    elements.topologyCard?.classList.remove("transition-sweep");
-    elements.modeSweep?.classList.remove("active");
-  }, 1500);
-}
 
 function setAccessMode(mode, options = {}) {
   if (!hasTopology()) return;
@@ -403,18 +382,16 @@ function setAccessMode(mode, options = {}) {
   elements.legendSecondary.innerHTML = `<i class="legend-dot inspect"></i> ${content.legendSecondary}`;
   elements.legendThreat.innerHTML = `<i class="legend-dot threat"></i> ${content.legendThreat}`;
 
-  elements.routeLabelLeft.textContent = content.labels[0];
-  elements.routeLabelCore.textContent = content.labels[1];
-  elements.routeLabelRight.textContent = content.labels[2];
+  if (elements.routeLabelLeft) elements.routeLabelLeft.textContent = content.labels[0];
+  if (elements.routeLabelCore) elements.routeLabelCore.textContent = content.labels[1];
+  if (elements.routeLabelRight) elements.routeLabelRight.textContent = content.labels[2];
   elements.simulationHint.textContent = content.hint;
   updateRouteStepper(content.steps);
 
   applyPathMode(mode);
   setActiveService(content.detail, { silent: true });
-  restartMotionAnimations();
 
   if (shouldAnimate) {
-    runModeSweep();
     window.setTimeout(() => elements.topologyCard?.classList.remove("mode-switching"), 720);
   }
 
