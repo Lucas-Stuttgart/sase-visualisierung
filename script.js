@@ -3,7 +3,37 @@ const services = {
     title: "SASE Policy Enforcement",
     icon: "bi-shield-check",
     text: "SASE bündelt Netzwerk- und Sicherheitsfunktionen als cloudnahes Service-Modell. Entscheidungen werden anhand von Identität, Gerätezustand, Zielanwendung und Risiko getroffen.",
-    tags: ["Unified Policy", "SASE PoP", "TLS Inspection", "Context Engine", "Zero Trust"]
+    tags: ["Unified Policy", "Policy Enforcement", "TLS Inspection", "Context Engine", "Zero Trust"]
+  },
+  classic: {
+    title: "Klassischer Zugriff ohne SASE",
+    icon: "bi-hdd-network",
+    text: "Der klassische Remote-Access-Ansatz führt Nutzer häufig erst über VPN und zentrale Sicherheitskomponenten ins Unternehmensnetz, bevor Anwendungen erreicht werden.",
+    tags: ["VPN", "Netzwerkzugang", "Zentrale Firewall", "Proxy", "Backhaul"]
+  },
+  vpn: {
+    title: "VPN-Zugang",
+    icon: "bi-key",
+    text: "Ein VPN baut einen Tunnel ins Unternehmensnetz auf. Dadurch entsteht oft zunächst Netzwerkzugang, bevor der konkrete Anwendungszugriff weiter eingeschränkt wird.",
+    tags: ["Tunnel", "Remote Access", "Netzwerkfokus", "Gateway"]
+  },
+  central: {
+    title: "Zentrale Firewall / Proxy",
+    icon: "bi-building-lock",
+    text: "Im klassischen Modell laufen Prüfungen häufig über zentrale Komponenten wie Firewall, Proxy oder VPN-Gateway. Das kann zu Umwegen führen, besonders bei SaaS- und Internet-Zugriffen.",
+    tags: ["Firewall", "Proxy", "Hub-and-Spoke", "Inspection"]
+  },
+  backhaul: {
+    title: "WAN-Backhaul",
+    icon: "bi-arrow-repeat",
+    text: "Traffic wird oft erst über das zentrale Netzwerk zurückgeführt, auch wenn die Zielanwendung eigentlich direkt im Internet oder in der Cloud liegt.",
+    tags: ["Umweg", "WAN", "Zentrale Kontrolle", "Latenz"]
+  },
+  sdwan: {
+    title: "SD-WAN",
+    icon: "bi-router",
+    text: "SD-WAN ist ein Netzwerkbaustein innerhalb einer SASE-Architektur. Es kann Standorte und Nutzerpfade dynamisch über geeignete Verbindungen und Policies steuern.",
+    tags: ["Pfadsteuerung", "Standorte", "QoS", "Local Breakout", "WAN Policy"]
   },
   ztna: {
     title: "Zero Trust Network Access",
@@ -48,10 +78,10 @@ const services = {
     tags: ["Posture Check", "EDR", "Patch Level", "Geo Signal"]
   },
   branch: {
-    title: "Branch / SD-WAN",
+    title: "Branch / Standort",
     icon: "bi-building-lock",
-    text: "Standorte können über SD-WAN- oder PoP-Anbindungen mit Sicherheitsdiensten und Anwendungen verbunden werden.",
-    tags: ["SD-WAN", "Local Breakout", "QoS", "Encrypted Tunnel"]
+    text: "Standorte können über SD-WAN- oder andere Anbindungen mit Sicherheitsdiensten und Anwendungen verbunden werden.",
+    tags: ["Standort", "WAN", "QoS", "Encrypted Tunnel"]
   },
   cloud: {
     title: "Cloud Apps",
@@ -78,13 +108,71 @@ const threatMotion = document.querySelector("#threatMotion");
 const trustRange = document.querySelector("#trustRange");
 const trustLabel = document.querySelector("#trustLabel");
 const trustMeterFill = document.querySelector("#trustMeterFill");
+const topologyModeTitle = document.querySelector("#topologyModeTitle");
+const topologyModeSubtitle = document.querySelector("#topologyModeSubtitle");
+const modeStatus = document.querySelector("#modeStatus");
+const coreNode = document.querySelector("#coreNode");
+const coreNodeIcon = document.querySelector("#coreNodeIcon");
+const coreNodeTitle = document.querySelector("#coreNodeTitle");
+const coreNodeSubtitle = document.querySelector("#coreNodeSubtitle");
+const legendPrimary = document.querySelector("#legendPrimary");
+const legendSecondary = document.querySelector("#legendSecondary");
+const legendThreat = document.querySelector("#legendThreat");
+
+let currentAccessMode = "sase";
+
+const pathModeDefinitions = {
+  sase: {
+    pathUserEdge: "M130 155 C285 115 345 235 470 260",
+    pathBranchEdge: "M125 410 C300 395 310 305 470 280",
+    pathDeviceEdge: "M165 285 C270 255 350 255 470 270",
+    pathEdgeCloud: "M520 260 C640 190 720 140 840 145",
+    pathEdgeApp: "M525 300 C655 345 720 405 842 410"
+  },
+  classic: {
+    pathUserEdge: "M130 155 C250 165 355 220 470 260",
+    pathBranchEdge: "M125 410 C285 455 355 350 470 292",
+    pathDeviceEdge: "M165 285 C285 300 355 292 470 278",
+    pathEdgeCloud: "M520 255 C610 105 730 92 840 145",
+    pathEdgeApp: "M520 306 C635 470 735 455 842 410"
+  }
+};
+
+const modeContent = {
+  sase: {
+    title: "SASE Zugriffspfad",
+    subtitle: "Identität, Kontext, Policy und Inspection in einer Demo-Ansicht",
+    status: "Mit SASE",
+    coreTitle: "SASE",
+    coreSubtitle: "Policy Enforcement",
+    coreIcon: "bi-shield-check",
+    coreService: "sase",
+    legendPrimary: "Direkter, geprüfter Zugriff",
+    legendSecondary: "Policy / Inspection",
+    legendThreat: "Blockierte Anfrage",
+    detail: "sase"
+  },
+  classic: {
+    title: "Klassischer Zugriffspfad ohne SASE",
+    subtitle: "VPN, zentrale Security und Backhaul als vereinfachte Vergleichsansicht",
+    status: "Ohne SASE",
+    coreTitle: "VPN / Security",
+    coreSubtitle: "Zentrales Netzwerk",
+    coreIcon: "bi-hdd-network",
+    coreService: "classic",
+    legendPrimary: "Verbindung über VPN / Zentrale",
+    legendSecondary: "Backhaul und zentrale Prüfung",
+    legendThreat: "Blockierte Anfrage",
+    detail: "classic"
+  }
+};
 
 const randomBetween = (min, max, decimals = 0) => {
   const value = Math.random() * (max - min) + min;
   return Number(value.toFixed(decimals));
 };
 
-function setActiveService(key) {
+function setActiveService(key, options = {}) {
   const service = services[key] ?? services.sase;
 
   detailTitle.textContent = service.title;
@@ -96,7 +184,9 @@ function setActiveService(key) {
     item.classList.toggle("active", item.dataset.service === key);
   });
 
-  addEvent("Demo-Kontext aktualisiert", `${service.title} wurde ausgewählt.`, "success");
+  if (!options.silent) {
+    addEvent("Demo-Kontext aktualisiert", `${service.title} wurde ausgewählt.`, "success");
+  }
 }
 
 function addEvent(title, message, variant = "") {
@@ -154,7 +244,7 @@ function animateCounter(element, target) {
 
 function refreshMetrics() {
   const metricTargets = {
-    latency: randomBetween(12, 31),
+    latency: randomBetween(currentAccessMode === "classic" ? 42 : 12, currentAccessMode === "classic" ? 85 : 31),
     sessions: randomBetween(4.1, 6.8, 1),
     allowed: randomBetween(11800, 16450),
     inspected: randomBetween(39800, 58100),
@@ -169,18 +259,87 @@ function refreshMetrics() {
   });
 }
 
+function applyPathMode(mode) {
+  Object.entries(pathModeDefinitions[mode]).forEach(([id, d]) => {
+    document.querySelector(`#${id}`)?.setAttribute("d", d);
+  });
+}
+
+function setAccessMode(mode, options = {}) {
+  currentAccessMode = mode;
+  const content = modeContent[mode];
+
+  topologyCard.dataset.accessMode = mode;
+  topologyCard.classList.toggle("classic-mode", mode === "classic");
+  topologyCard.classList.add("mode-switching");
+  setTimeout(() => topologyCard.classList.remove("mode-switching"), 560);
+
+  document.querySelectorAll(".access-mode-btn").forEach(button => {
+    const active = button.dataset.accessMode === mode;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+
+  topologyModeTitle.textContent = content.title;
+  topologyModeSubtitle.textContent = content.subtitle;
+  modeStatus.textContent = content.status;
+  coreNode.dataset.service = content.coreService;
+  coreNodeIcon.className = `bi ${content.coreIcon}`;
+  coreNodeTitle.textContent = content.coreTitle;
+  coreNodeSubtitle.textContent = content.coreSubtitle;
+  legendPrimary.innerHTML = `<i class="legend-dot normal"></i> ${content.legendPrimary}`;
+  legendSecondary.innerHTML = `<i class="legend-dot inspect"></i> ${content.legendSecondary}`;
+  legendThreat.innerHTML = `<i class="legend-dot threat"></i> ${content.legendThreat}`;
+
+  applyPathMode(mode);
+  setActiveService(content.detail, { silent: true });
+
+  if (!options.silent) {
+    const message = mode === "classic"
+      ? "Die Grafik zeigt jetzt VPN, zentrale Security und Backhaul als klassische Variante."
+      : "Die Grafik zeigt wieder den kontextbasierten SASE-Zugriffspfad.";
+    addEvent("Zugriffsmodus gewechselt", message, mode === "classic" ? "" : "success");
+  }
+}
+
 function simulateThreat() {
   topologyCard.classList.add("threat-mode");
   threatParticle.classList.add("active");
 
   addEvent("Demo-Anomalie erkannt", "Beispielhafter Login-Kontext mit erhöhtem Risiko.", "danger");
-  setActiveService("swg");
 
   try {
     threatMotion.beginElement();
   } catch {
     // Einige Browser blockieren SVG beginElement bei sehr restriktiven Einstellungen.
   }
+
+  if (currentAccessMode === "classic") {
+    setActiveService("vpn");
+
+    setTimeout(() => {
+      setActiveService("central");
+      addEvent("Zentrale Prüfung", "Die Demo-Anfrage wird über VPN und zentrale Security-Komponenten geführt.", "danger");
+      trustRange.value = 72;
+      updateTrust(72);
+    }, 950);
+
+    setTimeout(() => {
+      setActiveService("backhaul");
+      addEvent("Backhaul sichtbar", "Der Beispieltraffic nimmt den Umweg über das zentrale Netzwerk.", "danger");
+    }, 1850);
+
+    setTimeout(() => {
+      setActiveService("classic");
+      addEvent("Klassische Policy greift", "Die Demo-Anfrage wird zentral geprüft und anschließend blockiert.", "success");
+      topologyCard.classList.remove("threat-mode");
+      threatParticle.classList.remove("active");
+    }, 3300);
+
+    return;
+  }
+
+  setActiveService("swg");
 
   setTimeout(() => {
     setActiveService("ztna");
@@ -216,30 +375,14 @@ function filterTelemetry(filter) {
 function resetDashboard() {
   trustRange.value = 22;
   updateTrust(22);
-  setActiveService("sase");
+  setAccessMode("sase", { silent: true });
   filterTelemetry("all");
-  addEvent("Demo zurückgesetzt", "Die Ausgangswerte und die Standardansicht sind wieder aktiv.", "success");
+  addEvent("Demo zurückgesetzt", "Die Ausgangswerte und die SASE-Standardansicht sind wieder aktiv.", "success");
 }
 
-
-function setCompareMode(mode) {
-  document.querySelectorAll(".compare-tab").forEach(button => {
-    button.classList.toggle("active", button.dataset.compare === mode);
-  });
-
-  document.querySelectorAll("[data-compare-panel]").forEach(panel => {
-    const isActive = panel.dataset.comparePanel === mode;
-    panel.classList.toggle("active", isActive);
-    panel.classList.toggle("dimmed", !isActive);
-  });
-
-  const label = mode === "classic" ? "klassischen Remote-Access-Prozess" : "SASE-Zugriffspfad";
-  addEvent("Vergleichsansicht gewechselt", `Fokus auf ${label}.`);
-}
-
-function bindComparison() {
-  document.querySelectorAll(".compare-tab").forEach(button => {
-    button.addEventListener("click", () => setCompareMode(button.dataset.compare));
+function bindAccessModeSwitch() {
+  document.querySelectorAll(".access-mode-btn").forEach(button => {
+    button.addEventListener("click", () => setAccessMode(button.dataset.accessMode));
   });
 }
 
@@ -271,15 +414,15 @@ function bindInteractions() {
 }
 
 function seedEvents() {
-  addEvent("SASE Demo aktiv", "Beispielhafter SASE PoP mit 18 ms Latenz ausgewählt.", "success");
+  addEvent("SASE Demo aktiv", "Standardansicht mit SASE, Policy Enforcement und SD-WAN-Baustein geladen.", "success");
   addEvent("CASB-Regel aktiv", "SaaS-Zugriff anhand einer Beispielrichtlinie bewertet.");
   addEvent("SWG Inspection", "Web-Request wurde in der Demo kategorisiert und freigegeben.");
 }
 
 function boot() {
   bindInteractions();
-  bindComparison();
-  setActiveService("sase");
+  bindAccessModeSwitch();
+  setAccessMode("sase", { silent: true });
   updateTrust(Number(trustRange.value));
   seedEvents();
 

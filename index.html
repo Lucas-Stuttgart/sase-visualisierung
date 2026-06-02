@@ -38,7 +38,6 @@
       <div id="topNav" class="collapse navbar-collapse">
         <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
           <li class="nav-item"><a class="nav-link" href="#topology">Topologie</a></li>
-          <li class="nav-item"><a class="nav-link" href="#comparison">Vergleich</a></li>
           <li class="nav-item"><a class="nav-link" href="#capabilities">Bausteine</a></li>
           <li class="nav-item"><a class="nav-link" href="#telemetry">Telemetrie</a></li>
           <li class="nav-item"><a class="nav-link" href="impressum.html">Impressum</a></li>
@@ -70,10 +69,7 @@
 
             <div class="d-flex flex-wrap gap-3 mt-4">
               <button class="btn btn-primary btn-lg rounded-pill px-4" data-jump="#topology">
-                <i class="bi bi-diagram-3 me-2"></i> Architektur ansehen
-              </button>
-              <button class="btn btn-outline-light btn-lg rounded-pill px-4" data-jump="#comparison">
-                <i class="bi bi-arrow-left-right me-2"></i> Vergleich ansehen
+                <i class="bi bi-diagram-3 me-2"></i> Zugriffspfad ansehen
               </button>
             </div>
 
@@ -125,21 +121,31 @@
           <span class="eyebrow"><i class="bi bi-node-plus"></i> SASE Ablaufmodell</span>
           <h2 class="fw-black mt-3">Zugriffspfad vom Nutzer bis zur Anwendung</h2>
           <p class="text-secondary-emphasis">
-            Die Grafik zeigt vereinfacht, wie Anfragen über SASE-Funktionen wie ZTNA, SWG, CASB,
-            FWaaS und DLP bewertet werden. Die Simulation nutzt ausschließlich Beispieldaten.
+            Die Grafik zeigt vereinfacht, wie Anfragen mit SASE-Funktionen wie SD-WAN, ZTNA, SWG, CASB,
+            FWaaS und DLP bewertet werden. Über den Schieberegler kann zur klassischen Variante ohne SASE gewechselt werden.
           </p>
         </div>
 
         <div class="row g-4 align-items-stretch">
           <div class="col-xl-8">
-            <div class="topology-card glass-card" id="topologyCard">
+            <div class="topology-card glass-card" id="topologyCard" data-access-mode="sase">
               <div class="topology-header">
                 <div>
-                  <h3 class="h5 mb-1">SASE Zugriffspfad</h3>
-                  <span class="text-secondary">Identität, Kontext, Policy und Inspection in einer Demo-Ansicht</span>
+                  <h3 id="topologyModeTitle" class="h5 mb-1">SASE Zugriffspfad</h3>
+                  <span id="topologyModeSubtitle" class="text-secondary">Identität, Kontext, Policy und Inspection in einer Demo-Ansicht</span>
                 </div>
-                <div class="status-pill">
-                  <span class="live-dot"></span> Live
+                <div class="topology-actions">
+                  <div class="access-mode-switch" role="group" aria-label="Zugriffsmodus auswählen">
+                    <button class="access-mode-btn active" type="button" data-access-mode="sase" aria-pressed="true">
+                      <i class="bi bi-shield-check"></i> Mit SASE
+                    </button>
+                    <button class="access-mode-btn" type="button" data-access-mode="classic" aria-pressed="false">
+                      <i class="bi bi-hdd-network"></i> Ohne SASE / Klassisch
+                    </button>
+                  </div>
+                  <div class="status-pill">
+                    <span class="live-dot"></span> <span id="modeStatus">Mit SASE</span>
+                  </div>
                 </div>
               </div>
 
@@ -231,14 +237,14 @@
                     </foreignObject>
                   </g>
 
-                  <g class="node edge-node active" data-service="sase" transform="translate(495 278)" tabindex="0">
+                  <g id="coreNode" class="node edge-node active" data-service="sase" transform="translate(495 278)" tabindex="0">
                     <circle r="86" class="edge-ring"></circle>
                     <circle r="62" class="edge-core"></circle>
                     <foreignObject x="-66" y="-54" width="132" height="108">
                       <div class="node-html edge-html">
-                        <i class="bi bi-shield-check"></i>
-                        <span>SASE PoP</span>
-                        <small>Policy Enforcement</small>
+                        <i id="coreNodeIcon" class="bi bi-shield-check"></i>
+                        <span id="coreNodeTitle">SASE</span>
+                        <small id="coreNodeSubtitle">Policy Enforcement</small>
                       </div>
                     </foreignObject>
                   </g>
@@ -263,12 +269,16 @@
                     </foreignObject>
                   </g>
 
-                  <g class="service-ring" transform="translate(495 278)">
-                    <g class="service-node" data-service="swg" transform="translate(-40 -150)" tabindex="0">
+                  <g class="service-ring sase-only" transform="translate(495 278)">
+                    <g class="service-node wide-service" data-service="sdwan" transform="translate(-132 -92)" tabindex="0">
+                      <circle r="36"></circle>
+                      <text y="5">SD-WAN</text>
+                    </g>
+                    <g class="service-node" data-service="swg" transform="translate(-28 -156)" tabindex="0">
                       <circle r="34"></circle>
                       <text y="6">SWG</text>
                     </g>
-                    <g class="service-node" data-service="ztna" transform="translate(115 -96)" tabindex="0">
+                    <g class="service-node" data-service="ztna" transform="translate(118 -94)" tabindex="0">
                       <circle r="34"></circle>
                       <text y="6">ZTNA</text>
                     </g>
@@ -285,13 +295,30 @@
                       <text y="6">DLP</text>
                     </g>
                   </g>
+
+                  <g class="classic-ring classic-only" transform="translate(495 278)" aria-label="Klassische Zugriffskomponenten">
+                    <g class="classic-node" data-service="vpn" transform="translate(-120 -108)" tabindex="0">
+                      <circle r="36"></circle>
+                      <text y="6">VPN</text>
+                    </g>
+                    <g class="classic-node" data-service="central" transform="translate(124 -92)" tabindex="0">
+                      <circle r="38"></circle>
+                      <text y="-2">FW</text>
+                      <text y="13" class="subtext">Proxy</text>
+                    </g>
+                    <g class="classic-node" data-service="backhaul" transform="translate(0 156)" tabindex="0">
+                      <circle r="38"></circle>
+                      <text y="-2">WAN</text>
+                      <text y="13" class="subtext">Backhaul</text>
+                    </g>
+                  </g>
                 </svg>
               </div>
 
               <div class="legend-row">
-                <span><i class="legend-dot normal"></i> Freigegebene Anfrage</span>
-                <span><i class="legend-dot inspect"></i> Prüfung / Inspection</span>
-                <span><i class="legend-dot threat"></i> Blockierte Anfrage</span>
+                <span id="legendPrimary"><i class="legend-dot normal"></i> Direkter, geprüfter Zugriff</span>
+                <span id="legendSecondary"><i class="legend-dot inspect"></i> Policy / Inspection</span>
+                <span id="legendThreat"><i class="legend-dot threat"></i> Blockierte Anfrage</span>
               </div>
             </div>
           </div>
@@ -338,144 +365,6 @@
     </section>
 
 
-    <section id="comparison" class="section-pad comparison-section">
-      <div class="container">
-        <div class="section-heading text-center mx-auto">
-          <span class="eyebrow"><i class="bi bi-arrow-left-right"></i> Vergleich</span>
-          <h2 class="fw-black mt-3">Klassischer Zugriff ohne SASE im Vergleich</h2>
-          <p class="text-secondary-emphasis">
-            Der Vergleich zeigt vereinfacht, warum moderne Zugriffe anders bewertet werden müssen:
-            Nutzer, Geräte und Anwendungen befinden sich nicht mehr nur im Unternehmensnetz.
-          </p>
-        </div>
-
-        <div class="comparison-toggle glass-card p-2 mx-auto mb-4" role="group" aria-label="Vergleichsansicht auswählen">
-          <button class="compare-tab active" data-compare="classic">
-            <i class="bi bi-hdd-network"></i> Klassisch
-          </button>
-          <button class="compare-tab" data-compare="sase">
-            <i class="bi bi-shield-check"></i> Mit SASE
-          </button>
-        </div>
-
-        <div class="row g-4 align-items-stretch">
-          <div class="col-lg-6">
-            <article class="compare-card glass-card classic-flow active" data-compare-panel="classic">
-              <div class="compare-card-head">
-                <div>
-                  <span class="compare-kicker">Ohne SASE</span>
-                  <h3>Klassischer Remote-Access-Prozess</h3>
-                </div>
-                <span class="compare-badge warning">Netzwerkzentriert</span>
-              </div>
-
-              <div class="flow-lane classic-lane" aria-label="Klassischer Zugriffspfad ohne SASE">
-                <div class="flow-step">
-                  <i class="bi bi-person-laptop"></i>
-                  <strong>Nutzer</strong>
-                  <small>Extern oder mobil</small>
-                </div>
-                <div class="flow-arrow"><span></span></div>
-                <div class="flow-step">
-                  <i class="bi bi-key"></i>
-                  <strong>VPN</strong>
-                  <small>Tunnel ins Netzwerk</small>
-                </div>
-                <div class="flow-arrow"><span></span></div>
-                <div class="flow-step">
-                  <i class="bi bi-building-lock"></i>
-                  <strong>Zentrale Security</strong>
-                  <small>Firewall / Proxy</small>
-                </div>
-                <div class="flow-arrow"><span></span></div>
-                <div class="flow-step muted-step">
-                  <i class="bi bi-cloud"></i>
-                  <strong>Apps</strong>
-                  <small>SaaS / Internet / intern</small>
-                </div>
-              </div>
-
-              <ul class="compare-list">
-                <li><i class="bi bi-arrow-repeat"></i> Traffic wird häufig erst ins zentrale Netzwerk zurückgeführt.</li>
-                <li><i class="bi bi-diagram-2"></i> VPN-Zugriff ist oft näher am Netzwerk als an der einzelnen Anwendung.</li>
-                <li><i class="bi bi-sliders"></i> Richtlinien, Logs und Prüfungen liegen häufig in mehreren Systemen.</li>
-                <li><i class="bi bi-hourglass-split"></i> SaaS- und Cloud-Zugriffe können durch Umwege unnötig langsam wirken.</li>
-              </ul>
-            </article>
-          </div>
-
-          <div class="col-lg-6">
-            <article class="compare-card glass-card sase-flow" data-compare-panel="sase">
-              <div class="compare-card-head">
-                <div>
-                  <span class="compare-kicker">Mit SASE</span>
-                  <h3>Kontextbasierter Zugriff über SASE</h3>
-                </div>
-                <span class="compare-badge success">Policybasiert</span>
-              </div>
-
-              <div class="flow-lane sase-lane" aria-label="SASE Zugriffspfad">
-                <div class="flow-step">
-                  <i class="bi bi-person-check"></i>
-                  <strong>Nutzer</strong>
-                  <small>Identität + MFA</small>
-                </div>
-                <div class="flow-arrow"><span></span></div>
-                <div class="flow-step">
-                  <i class="bi bi-phone-check"></i>
-                  <strong>Gerät</strong>
-                  <small>Posture Check</small>
-                </div>
-                <div class="flow-arrow"><span></span></div>
-                <div class="flow-step active-step">
-                  <i class="bi bi-shield-lock"></i>
-                  <strong>SASE PoP</strong>
-                  <small>Policy Enforcement</small>
-                </div>
-                <div class="flow-arrow"><span></span></div>
-                <div class="flow-step">
-                  <i class="bi bi-cloud-check"></i>
-                  <strong>App</strong>
-                  <small>Nur erlaubter Zugriff</small>
-                </div>
-              </div>
-
-              <ul class="compare-list">
-                <li><i class="bi bi-person-badge"></i> Entscheidungen berücksichtigen Identität, Gerät, Ziel, Standort und Risiko.</li>
-                <li><i class="bi bi-door-closed"></i> Zugriff erfolgt anwendungsbezogen statt als pauschale Netzwerkfreigabe.</li>
-                <li><i class="bi bi-funnel"></i> Web-, SaaS- und Datenflüsse können einheitlich geprüft werden.</li>
-                <li><i class="bi bi-lightning-charge"></i> Der nächstgelegene SASE PoP kann Umwege über das zentrale Netz reduzieren.</li>
-              </ul>
-            </article>
-          </div>
-        </div>
-
-        <div class="row g-4 mt-2">
-          <div class="col-md-4">
-            <div class="contrast-tile glass-card">
-              <i class="bi bi-signpost-split"></i>
-              <h4>Zugriffsmodell</h4>
-              <p>Klassisch startet häufig mit Netzwerkzugang. SASE bewertet stärker den konkreten Zugriff auf eine Anwendung.</p>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="contrast-tile glass-card">
-              <i class="bi bi-shield-check"></i>
-              <h4>Security-Prüfung</h4>
-              <p>Bei SASE werden Sicherheitsfunktionen näher am Nutzer und konsistenter über verschiedene Ziele hinweg angewendet.</p>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="contrast-tile glass-card">
-              <i class="bi bi-cloud-arrow-up"></i>
-              <h4>Cloud-Nutzung</h4>
-              <p>Für SaaS, Internet und mobile Arbeit ist ein direkter, geprüfter Zugriff oft passender als zentraler Backhaul.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section id="capabilities" class="section-pad">
       <div class="container">
         <div class="section-heading mx-auto text-center">
@@ -521,6 +410,14 @@
               <i class="bi bi-file-earmark-lock"></i>
               <h3>DLP</h3>
               <p>Sensible Datenmuster erkennen und den unerwünschten Abfluss reduzieren.</p>
+              <button class="btn btn-sm btn-outline-info">Fokus setzen</button>
+            </article>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <article class="cap-card glass-card" data-service="sdwan">
+              <i class="bi bi-router"></i>
+              <h3>SD-WAN</h3>
+              <p>Standorte und Nutzerpfade intelligent über verfügbare Verbindungen und Policies steuern.</p>
               <button class="btn btn-sm btn-outline-info">Fokus setzen</button>
             </article>
           </div>
