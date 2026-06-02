@@ -1,0 +1,258 @@
+<section id="topology" class="section-pad">
+      <div class="container">
+        <div class="section-heading text-center mx-auto">
+          <span class="eyebrow"><i class="bi bi-node-plus"></i> SASE Ablaufmodell</span>
+          <h2 class="fw-black mt-3">Zugriffspfad vom Nutzer bis zur Anwendung</h2>
+          <p class="text-secondary-emphasis">
+            Die Grafik zeigt vereinfacht, wie Anfragen mit SASE-Funktionen wie SD-WAN, ZTNA, SWG, CASB,
+            FWaaS und DLP bewertet werden. Über den Schieberegler kann zur Variante ohne SASE gewechselt werden.
+          </p>
+        </div>
+
+        <div class="row g-4 align-items-stretch">
+          <div class="col-xl-8">
+            <div class="topology-card glass-card" id="topologyCard" data-access-mode="sase">
+              <div class="topology-header">
+                <div>
+                  <h3 id="topologyModeTitle" class="h5 mb-1">SASE Zugriffspfad</h3>
+                  <span id="topologyModeSubtitle" class="text-secondary">Identität, Kontext, Policy und Inspection in einer Demo-Ansicht</span>
+                </div>
+                <div class="topology-actions">
+                  <div class="access-mode-switch" role="group" aria-label="Zugriffsmodus auswählen">
+                    <button class="access-mode-btn active" type="button" data-access-mode="sase" aria-pressed="true">
+                      <i class="bi bi-shield-check"></i> Mit SASE
+                    </button>
+                    <button class="access-mode-btn" type="button" data-access-mode="classic" aria-pressed="false">
+                      <i class="bi bi-hdd-network"></i> Ohne SASE
+                    </button>
+                  </div>
+                  <div class="status-pill">
+                    <span class="live-dot"></span> <span id="modeStatus">Mit SASE</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="svg-shell">
+                <svg id="saseSvg" viewBox="0 0 960 560" role="img" aria-label="SASE Netzwerkdiagramm">
+                  <defs>
+                    <linearGradient id="edgeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#6ee7ff"/>
+                      <stop offset="45%" stop-color="#8b5cf6"/>
+                      <stop offset="100%" stop-color="#22c55e"/>
+                    </linearGradient>
+
+                    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="7" result="blur"/>
+                      <feMerge>
+                        <feMergeNode in="blur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
+
+                    <path id="pathUserEdge" d="M130 155 C285 115 345 235 470 260" />
+                    <path id="pathBranchEdge" d="M125 410 C300 395 310 305 470 280" />
+                    <path id="pathDeviceEdge" d="M165 285 C270 255 350 255 470 270" />
+                    <path id="pathEdgeCloud" d="M520 260 C640 190 720 140 840 145" />
+                    <path id="pathEdgeApp" d="M525 300 C655 345 720 405 842 410" />
+                    <path id="pathRouteSweep" d="M130 155 C285 115 345 235 470 260 C640 190 720 140 840 145" />
+                  </defs>
+
+                  <g class="paths">
+                    <use href="#pathUserEdge" class="flow-line"></use>
+                    <use href="#pathBranchEdge" class="flow-line"></use>
+                    <use href="#pathDeviceEdge" class="flow-line"></use>
+                    <use href="#pathEdgeCloud" class="flow-line"></use>
+                    <use href="#pathEdgeApp" class="flow-line"></use>
+                  </g>
+
+
+                  <g class="packets">
+                    <circle r="5" class="packet packet-a">
+                      <animateMotion dur="4.8s" repeatCount="indefinite">
+                        <mpath href="#pathUserEdge"/>
+                      </animateMotion>
+                    </circle>
+                    <circle r="5" class="packet packet-b">
+                      <animateMotion dur="5.6s" repeatCount="indefinite">
+                        <mpath href="#pathBranchEdge"/>
+                      </animateMotion>
+                    </circle>
+                    <circle r="5" class="packet packet-c">
+                      <animateMotion dur="4.2s" repeatCount="indefinite">
+                        <mpath href="#pathEdgeCloud"/>
+                      </animateMotion>
+                    </circle>
+                  </g>
+
+                  <g id="threatParticle" class="threat-particle">
+                    <circle r="8"></circle>
+                    <circle r="16" class="threat-pulse"></circle>
+                    <animateMotion id="threatMotion" dur="3.2s" begin="indefinite" fill="freeze">
+                      <mpath href="#pathUserEdge"/>
+                    </animateMotion>
+                  </g>
+
+                  <g class="node external-node" data-service="user" transform="translate(130 155)" tabindex="0">
+                    <circle r="52"></circle>
+                    <foreignObject x="-45" y="-38" width="90" height="76">
+                      <div class="node-html">
+                        <i class="bi bi-person-workspace"></i>
+                        <span>User</span>
+                      </div>
+                    </foreignObject>
+                  </g>
+
+                  <g class="node external-node" data-service="device" transform="translate(165 285)" tabindex="0">
+                    <circle r="48"></circle>
+                    <foreignObject x="-45" y="-38" width="90" height="76">
+                      <div class="node-html">
+                        <i class="bi bi-phone"></i>
+                        <span>Device</span>
+                      </div>
+                    </foreignObject>
+                  </g>
+
+                  <g class="node external-node" data-service="branch" transform="translate(125 410)" tabindex="0">
+                    <circle r="52"></circle>
+                    <foreignObject x="-48" y="-38" width="96" height="76">
+                      <div class="node-html">
+                        <i class="bi bi-building-lock"></i>
+                        <span>Branch</span>
+                      </div>
+                    </foreignObject>
+                  </g>
+
+                  <g id="coreNode" class="node edge-node active" data-service="sase" transform="translate(495 278)" tabindex="0">
+                    <circle r="86" class="edge-ring"></circle>
+                    <circle r="62" class="edge-core"></circle>
+                    <foreignObject x="-66" y="-54" width="132" height="108">
+                      <div class="node-html edge-html">
+                        <i id="coreNodeIcon" class="bi bi-shield-check"></i>
+                        <span id="coreNodeTitle">SASE</span>
+                        <small id="coreNodeSubtitle">Policy Enforcement</small>
+                      </div>
+                    </foreignObject>
+                  </g>
+
+                  <g class="node external-node" data-service="cloud" transform="translate(842 145)" tabindex="0">
+                    <circle r="55"></circle>
+                    <foreignObject x="-52" y="-40" width="104" height="80">
+                      <div class="node-html">
+                        <i class="bi bi-cloud-check"></i>
+                        <span>Cloud Apps</span>
+                      </div>
+                    </foreignObject>
+                  </g>
+
+                  <g class="node external-node" data-service="internet" transform="translate(842 410)" tabindex="0">
+                    <circle r="55"></circle>
+                    <foreignObject x="-52" y="-40" width="104" height="80">
+                      <div class="node-html">
+                        <i class="bi bi-globe2"></i>
+                        <span>Internet</span>
+                      </div>
+                    </foreignObject>
+                  </g>
+
+                  <g class="service-ring sase-only" transform="translate(495 278)">
+                    <g class="service-node wide-service" data-service="sdwan" transform="translate(-132 -92)" tabindex="0">
+                      <circle r="36"></circle>
+                      <text y="5">SD-WAN</text>
+                    </g>
+                    <g class="service-node" data-service="swg" transform="translate(-28 -156)" tabindex="0">
+                      <circle r="34"></circle>
+                      <text y="6">SWG</text>
+                    </g>
+                    <g class="service-node" data-service="ztna" transform="translate(118 -94)" tabindex="0">
+                      <circle r="34"></circle>
+                      <text y="6">ZTNA</text>
+                    </g>
+                    <g class="service-node" data-service="casb" transform="translate(142 68)" tabindex="0">
+                      <circle r="34"></circle>
+                      <text y="6">CASB</text>
+                    </g>
+                    <g class="service-node" data-service="fwaas" transform="translate(0 158)" tabindex="0">
+                      <circle r="34"></circle>
+                      <text y="6">FW</text>
+                    </g>
+                    <g class="service-node" data-service="dlp" transform="translate(-145 70)" tabindex="0">
+                      <circle r="34"></circle>
+                      <text y="6">DLP</text>
+                    </g>
+                  </g>
+
+                  <g id="classicRing" class="classic-ring classic-only" transform="translate(390 278)" aria-label="Zugriffskomponenten ohne SASE">
+                    <g class="classic-node" data-service="backhaul" transform="translate(225 -70)" tabindex="0">
+                      <circle r="44"></circle>
+                      <text y="-4">RZ</text>
+                      <text y="12" class="subtext">Netz</text>
+                    </g>
+                    <g class="classic-node" data-service="central" transform="translate(225 65)" tabindex="0">
+                      <circle r="38"></circle>
+                      <text y="-2">Proxy</text>
+                      <text y="13" class="subtext">FW</text>
+                    </g>
+                  </g>
+
+                </svg>
+              </div>
+
+              <div class="legend-row">
+                <span id="legendPrimary"><i class="legend-dot normal"></i> Direkter, geprüfter Zugriff</span>
+                <span id="legendSecondary"><i class="legend-dot inspect"></i> Policy / Inspection</span>
+                <span id="legendThreat"><i class="legend-dot threat"></i> Blockierte Anfrage</span>
+              </div>
+
+
+              <div class="topology-sim-panel">
+                <div>
+                  <strong>Risiko im Zugriffspfad simulieren</strong>
+                  <span id="simulationHint">Startet eine beispielhafte Policy-Prüfung im aktiven Modus.</span>
+                </div>
+                <button id="simulateThreat" class="btn btn-sm btn-glow">
+                  <i class="bi bi-lightning-charge-fill me-1"></i> Risiko simulieren
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-4">
+            <aside class="glass-card detail-card h-100">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <span class="eyebrow"><i class="bi bi-cpu"></i> Service Detail</span>
+                  <h3 id="detailTitle" class="h4 mt-3 mb-2">SASE Policy Enforcement</h3>
+                </div>
+                <div id="detailIcon" class="detail-icon"><i class="bi bi-shield-check"></i></div>
+              </div>
+
+              <p id="detailText" class="text-secondary-emphasis">
+                SASE bündelt Netzwerk- und Sicherheitsfunktionen als cloudnahes Service-Modell.
+                Entscheidungen basieren auf Identität, Gerätezustand, Zielanwendung und Risiko.
+              </p>
+
+              <div id="detailTags" class="tag-cloud"></div>
+
+              <div class="trust-panel mt-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <strong>Adaptive Trust Score</strong>
+                  <span id="trustLabel" class="badge text-bg-success">Niedriges Risiko</span>
+                </div>
+                <input id="trustRange" type="range" class="form-range" min="0" max="100" value="22">
+                <div class="trust-meter" aria-hidden="true">
+                  <span id="trustMeterFill"></span>
+                </div>
+                <small class="text-secondary">Passe den Demo-Kontext an: Gerät, Standort, Verhalten und Schutzbedarf der Anwendung.</small>
+              </div>
+
+              <div class="timeline mt-4">
+                <div class="timeline-title">
+                  <i class="bi bi-broadcast-pin"></i> Security-Ereignisse
+                </div>
+                <div id="eventLog" class="event-log"></div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>

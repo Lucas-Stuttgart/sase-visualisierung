@@ -263,9 +263,6 @@ function setActiveService(key, options = {}) {
     item.classList.toggle("active", item.dataset.service === key);
   });
 
-  if (!options.silent) {
-    addEvent("Demo-Kontext aktualisiert", `${service.title} wurde ausgewählt.`, "success");
-  }
 }
 
 function addEvent(title, message, variant = "") {
